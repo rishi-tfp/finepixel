@@ -1,0 +1,16 @@
+{% comment %}
+  The Fine Pixel — headless storefront redirect
+  ================================================
+  Paste into Online Store → Themes → … → Edit code → layout/theme.liquid
+  Place as the FIRST thing inside <head> (before other tags).
+
+  Domain: www.thefinepixel.com (apex thefinepixel.com should redirect to www
+  in DNS / Vercel). Update this if the canonical host changes.
+{% endcomment %}
+{% assign storefront_url = "https://www.thefinepixel.com" %}
+{% if template.name == "index" or request.page_type == "index" or request.path == "/" %}
+  <meta http-equiv="refresh" content="0; url={{ storefront_url }}/" />
+  <script>
+    window.location.replace({{ storefront_url | json }} + "/");
+  </script>
+{% endif %}

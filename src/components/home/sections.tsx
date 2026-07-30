@@ -1,0 +1,524 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { OptimizedImage } from "@/components/shared/optimized-image";
+import { MaterialIcon } from "@/components/shared/material-icon";
+import { images } from "@/lib/images";
+import {
+  getWhatsAppOrderUrl,
+  WHATSAPP_QUOTE_MESSAGE,
+} from "@/lib/whatsapp";
+
+export function HomeHero() {
+  return (
+    <section className="relative mx-auto max-w-container-max overflow-hidden md:flex md:min-h-[921px] md:items-center md:px-margin-desktop md:py-section-gap">
+      <div className="flex w-full flex-col md:grid md:grid-cols-12 md:items-center md:gap-gutter">
+        <div className="z-10 space-y-6 px-margin-mobile pt-8 pb-10 md:col-span-6 md:space-y-0 md:px-0 md:pt-0 md:pb-0">
+          <span className="mb-0 block font-label-md text-label-md tracking-[0.2em] text-secondary uppercase md:mb-4">
+            New Atelier Release
+          </span>
+          <h1 className="font-display-lg text-display-lg-mobile leading-tight md:mb-6 md:text-display-lg">
+            Designed to Capture Brilliant Ideas.
+          </h1>
+          <p className="max-w-lg font-body-lg text-body-lg text-on-surface-variant md:mb-10">
+            Premium notebooks crafted for students, professionals and creators
+            who appreciate thoughtful design and tactile excellence.
+          </p>
+          <div className="flex flex-col gap-3 md:flex-row md:gap-4">
+            <Link
+              href="/collections"
+              className="premium-lift w-full rounded-lg bg-primary px-10 py-4 text-center font-label-md text-on-primary shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl md:w-auto"
+            >
+              Shop Collection
+            </Link>
+            <Link
+              href="/#customizer"
+              className="premium-lift w-full rounded-lg border border-primary px-10 py-4 text-center font-label-md text-primary transition-all hover:bg-primary hover:text-on-primary md:w-auto"
+            >
+              Customize Yours
+            </Link>
+          </div>
+        </div>
+        <div className="relative w-full px-margin-mobile md:col-span-6 md:mt-0 md:px-0">
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl shadow-xl md:shadow-2xl">
+            <OptimizedImage
+              src={images.homeHero}
+              alt="Professional high-definition editorial photography of a premium designer notebook on a clean, modern wooden desk. Soft natural lighting, minimal aesthetic, with a cup of specialty coffee and a high-end pen nearby."
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute -bottom-6 -left-6 hidden max-w-[200px] rounded-xl border border-outline-variant/10 bg-white p-6 shadow-lg lg:block">
+            <p className="font-caption italic text-on-surface-variant">
+              &ldquo;The texture of the paper is unparalleled for sketching.&rdquo;
+            </p>
+            <p className="mt-2 font-label-md">— Julian V, Architect</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const series = [
+  {
+    title: "Designer",
+    href: "/collections",
+    src: images.designer,
+    alt: "High-definition product shot of a navy blue hardcover designer notebook with gold foil stamping.",
+  },
+  {
+    title: "Spiral",
+    href: "/collections?edition=softcover",
+    src: images.spiral,
+    alt: "A premium spiral-bound diary featuring metallic gold coils.",
+  },
+  {
+    title: "Corporate",
+    href: "/corporate",
+    src: images.corporate,
+    alt: "Sophisticated black leather-bound corporate notebooks stacked in a professional boardroom setting.",
+  },
+  {
+    title: "Student",
+    href: "/collections",
+    src: images.student,
+    alt: "Vibrant yet minimalist student notebook on a light wood desk.",
+  },
+  {
+    title: "Personalized",
+    href: "/#customizer",
+    src: images.personalized,
+    alt: "Macro shot of a personalized notebook featuring a gold-foiled name on the cover.",
+  },
+] as const;
+
+export function CuratedSeries() {
+  return (
+    <section
+      className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop md:py-section-gap"
+      id="collections"
+    >
+      <div className="mb-8 flex items-end justify-between md:mb-16">
+        <div className="space-y-2">
+          <h2 className="font-headline-lg text-headline-lg md:mb-4">
+            Curated Series
+          </h2>
+          <p className="font-body-md text-on-surface-variant">
+            Find the perfect companion for your creative workflow.
+          </p>
+        </div>
+        <Link
+          href="/collections"
+          className="hidden font-label-md text-secondary underline-offset-8 hover:underline md:inline"
+        >
+          View All Series
+        </Link>
+      </div>
+      <div className="hide-scrollbar -mx-margin-mobile flex gap-gutter overflow-x-auto px-margin-mobile md:mx-0 md:grid md:grid-cols-5 md:gap-6 md:overflow-visible md:px-0">
+        {series.map((item) => (
+          <Link
+            key={item.title}
+            href={item.href}
+            className="group relative aspect-[3/4] w-64 flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl md:w-auto"
+          >
+            <div className="absolute inset-0 z-10 bg-black/30 transition-all duration-500 group-hover:bg-black/40" />
+            <OptimizedImage
+              src={item.src}
+              alt={item.alt}
+              fill
+              sizes="(max-width: 768px) 256px, 20vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div className="absolute bottom-6 left-6 z-20">
+              <h3 className="font-headline-md text-headline-md text-white">
+                {item.title}
+              </h3>
+            </div>
+          </Link>
+        ))}
+      </div>
+      <Link
+        href="/collections"
+        className="mt-4 inline-block font-label-md text-secondary underline underline-offset-8 md:hidden"
+      >
+        View All Series
+      </Link>
+    </section>
+  );
+}
+
+const qualities = [
+  {
+    icon: "description",
+    title: "Premium Writing Paper",
+    desc: "Acid-free, bleed-resistant cream paper for a smooth writing experience.",
+  },
+  {
+    icon: "auto_awesome",
+    title: "Gloss/Matte Finishes",
+    desc: "Choose the haptic response that fits your unique aesthetic style.",
+  },
+  {
+    icon: "link",
+    title: "Metallic Binding",
+    desc: "Durable twin-wire binding allows your book to lay perfectly flat.",
+  },
+  {
+    icon: "space_dashboard",
+    title: "Minimal Aesthetic",
+    desc: "Clean layouts that eliminate distractions and foster deep focus.",
+  },
+  {
+    icon: "edit_note",
+    title: "Personalisation",
+    desc: "Custom foil stamping and bespoke layouts tailored to you.",
+  },
+  {
+    icon: "search_check",
+    title: "Attention to Detail",
+    desc: "Hand-inspected for perfection at every stage of the journey.",
+  },
+] as const;
+
+export function EssenceOfQuality() {
+  return (
+    <section className="bg-surface-container-lowest py-16 md:py-section-gap">
+      <div className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
+        <div className="mx-auto mb-16 max-w-2xl text-center md:mb-20">
+          <h2 className="mb-6 font-headline-lg text-headline-lg">
+            The Essence of Quality
+          </h2>
+          <p className="mx-auto max-w-xs font-body-md text-on-surface-variant md:max-w-none">
+            Every element of our stationery is chosen with uncompromising
+            standards to ensure your thoughts are preserved with the dignity
+            they deserve.
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 md:gap-x-12 md:gap-y-16">
+          {qualities.map((q) => (
+            <div key={q.title} className="flex flex-col items-center text-center">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-outline-variant/10 bg-background md:mb-6 md:h-16 md:w-16 md:shadow-sm">
+                <MaterialIcon
+                  name={q.icon}
+                  className="text-xl text-primary md:text-3xl"
+                />
+              </div>
+              <h4 className="mb-2 font-label-md text-label-md">{q.title}</h4>
+              <p className="font-caption text-on-surface-variant">{q.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function CustomizerSection() {
+  return (
+    <section
+      className="overflow-hidden bg-surface-container py-16 md:py-section-gap"
+      id="customizer"
+    >
+      <div className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
+        <div className="grid grid-cols-1 items-center gap-gutter lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <h2 className="mb-8 font-headline-lg text-headline-lg">
+              Your Story, Your Design.
+            </h2>
+            <div className="space-y-12">
+              {(
+                [
+                  {
+                    step: "1",
+                    active: true,
+                    title: "Share Your Idea",
+                    desc: "Tell us the name, initials, logo, artwork, or message you want on your notebook.",
+                  },
+                  {
+                    step: "2",
+                    active: false,
+                    title: "Chat on WhatsApp",
+                    desc: "Message our team on WhatsApp. We’ll refine the details with you and confirm what’s possible.",
+                  },
+                  {
+                    step: "3",
+                    active: false,
+                    title: "Approve & Order",
+                    desc: "Review mockups from our team, then place your personalized order through WhatsApp.",
+                  },
+                ] as const
+              ).map((item) => (
+                <div key={item.step} className="flex gap-6">
+                  <span
+                    className={
+                      item.active
+                        ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary font-bold text-on-primary"
+                        : "flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary font-bold text-primary"
+                    }
+                  >
+                    {item.step}
+                  </span>
+                  <div>
+                    <h4 className="mb-2 font-label-md text-label-md">
+                      {item.title}
+                    </h4>
+                    <p className="font-body-md text-on-surface-variant">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <a
+              href={
+                getWhatsAppOrderUrl() ??
+                "https://api.whatsapp.com/send?text=" +
+                  encodeURIComponent(
+                    "Hi! I'd like to order a customized Fine Pixel notebook.",
+                  )
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="premium-lift mt-12 inline-flex h-auto w-full items-center justify-center rounded-lg bg-primary px-10 py-4 font-label-md text-on-primary transition-opacity hover:opacity-90 md:mt-16 sm:w-auto"
+            >
+              Customize on WhatsApp
+            </a>
+          </div>
+          <div className="lg:col-span-7">
+            <div className="relative rounded-3xl bg-white p-4 shadow-2xl md:p-8">
+              <div className="relative aspect-video w-full overflow-hidden rounded-2xl">
+                <OptimizedImage
+                  src={images.customizer}
+                  alt="A Fine Pixel notebook ready for personalization — chat with us on WhatsApp to customize yours."
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 58vw"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const lifestyle = [
+  { src: images.lifestyle1, alt: "Aesthetic desk setup with notebook and coffee." },
+  { src: images.lifestyle2, alt: "Close up of a hand writing in an open notebook." },
+  { src: images.lifestyle3, alt: "Bright artist's studio with sketchbooks." },
+  { src: images.lifestyle4, alt: "Organized flat-lay of creative professional gear." },
+  { src: images.lifestyle5, alt: "Stack of colorful minimalist notebooks." },
+  { src: images.lifestyle6, alt: "Minimalist library study nook with notebook." },
+] as const;
+
+export function LifestyleGallery() {
+  return (
+    <section className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop md:py-section-gap">
+      <h2 className="mb-8 text-center font-headline-lg text-headline-lg md:mb-16">
+        Inspired Spaces
+      </h2>
+      <div className="masonry-mobile md:hidden">
+        {lifestyle.map((item) => (
+          <OptimizedImage
+            key={`m-${item.src}`}
+            src={item.src}
+            alt={item.alt}
+            width={600}
+            height={750}
+            sizes="50vw"
+            className="w-full rounded-xl shadow-sm"
+          />
+        ))}
+      </div>
+      <div className="masonry hidden md:block">
+        {lifestyle.map((item) => (
+          <div key={item.src} className="mb-6 break-inside-avoid">
+            <OptimizedImage
+              src={item.src}
+              alt={item.alt}
+              width={600}
+              height={750}
+              sizes="(max-width: 1024px) 50vw, 33vw"
+              className="w-full cursor-pointer rounded-2xl shadow-sm transition-opacity hover:opacity-90"
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function CorporateGifting() {
+  return (
+    <section
+      id="corporate"
+      className="relative flex min-h-[500px] items-center overflow-hidden md:min-h-[614px]"
+    >
+      <div className="absolute inset-0 z-0">
+        <OptimizedImage
+          src={images.corporateBanner}
+          alt="A professional modern office setting with Fine Pixel corporate notebooks on a conference table."
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/60" />
+      </div>
+      <div className="relative z-10 mx-auto w-full max-w-container-max px-margin-mobile py-12 text-center md:px-margin-desktop md:py-0 md:text-left">
+        <div className="mx-auto max-w-2xl space-y-6 md:mx-0 md:space-y-0">
+          <h2 className="font-headline-lg text-headline-lg text-white md:mb-6">
+            Elevate Your Corporate Identity
+          </h2>
+          <p className="font-body-lg text-white/80 md:mb-10">
+            Bespoke stationery solutions for modern brands. From custom cover
+            colors to internal page layouts and bulk personalization.
+          </p>
+          <div className="flex flex-col gap-3 md:flex-row md:gap-4">
+            <a
+              href={
+                getWhatsAppOrderUrl(WHATSAPP_QUOTE_MESSAGE) ??
+                "https://api.whatsapp.com/send?text=" +
+                  encodeURIComponent(WHATSAPP_QUOTE_MESSAGE)
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="premium-lift inline-flex h-auto w-full items-center justify-center rounded-lg bg-white px-10 py-4 font-label-md text-primary transition-all hover:bg-secondary-fixed hover:text-primary md:w-auto"
+            >
+              Request a Quote
+            </a>
+            <Link
+              href="/corporate"
+              className="premium-lift inline-flex h-auto w-full items-center justify-center rounded-lg border border-white/40 px-10 py-4 font-label-md text-white transition-all hover:bg-white/10 md:w-auto"
+            >
+              Learn More
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function AboutSection() {
+  return (
+    <section
+      className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop md:py-section-gap"
+      id="studio"
+    >
+      <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-20">
+        <div className="relative order-1 space-y-8 md:space-y-0">
+          <div className="absolute -top-10 -left-10 hidden h-40 w-40 rounded-full bg-secondary/10 blur-3xl md:block" />
+          <h2 className="font-headline-lg text-headline-lg md:mb-8">
+            Our Philosophy of Craft
+          </h2>
+          <div className="space-y-6 font-body-md text-on-surface-variant">
+            <p>
+              At The Fine Pixel, we believe that the tools you use define the
+              clarity of your thoughts. Born from a small design studio, we set
+              out to create the perfect balance between tactile tradition and
+              modern utility.
+            </p>
+            <p>
+              Every notebook is more than just paper—it is a sanctuary for your
+              most brilliant ideas, your sketches, and your life&apos;s goals.
+              We obsess over the details so you can focus on the work that
+              matters.
+            </p>
+            <p>
+              Our commitment to sustainability means using ethically sourced
+              materials and minimizing our footprint, ensuring that your legacy
+              is as kind to the planet as it is inspiring to you.
+            </p>
+          </div>
+          <button
+            type="button"
+            className="mt-0 flex items-center gap-2 font-label-md text-primary underline underline-offset-8 transition-all hover:gap-4 md:mt-12"
+          >
+            Read Our Full Story{" "}
+            <MaterialIcon name="arrow_right_alt" />
+          </button>
+        </div>
+        <div className="relative order-2 aspect-[4/5] overflow-hidden rounded-2xl shadow-xl md:rounded-3xl">
+          <OptimizedImage
+            src={images.aboutCraft}
+            alt="A black and white close-up photograph of a craftsman's hands carefully inspecting luxury notebook covers."
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const igPosts = [
+  { src: images.ig1, alt: "Instagram post showing a flatlay of a notebook and a coffee cup." },
+  { src: images.ig2, alt: "Instagram post showing a personalized notebook with gold lettering." },
+  { src: images.ig3, alt: "Instagram post showing a clean studio space with stationery." },
+  { src: images.ig4, alt: "Instagram post of a person sketching in a designer notebook." },
+  { src: images.ig5, alt: "Instagram post showing a stack of colorful student essentials." },
+  { src: images.ig6, alt: "Instagram post showing a minimalist office desk with a laptop and notebook." },
+] as const;
+
+export function InstagramSection() {
+  return (
+    <section className="md:py-section-gap">
+      <div className="mx-auto mb-8 flex max-w-container-max items-center justify-between px-margin-mobile md:mb-12 md:px-margin-desktop">
+        <h2 className="font-headline-md text-headline-md">@thefinepixel</h2>
+        <a
+          href="https://www.instagram.com/thefinepixel/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-label-md text-secondary hover:underline"
+        >
+          Follow Our Journey
+        </a>
+      </div>
+      <div className="grid grid-cols-3 gap-1 md:grid-cols-6 md:gap-2">
+        {igPosts.map((post) => (
+          <div
+            key={post.src}
+            className="group relative aspect-square overflow-hidden"
+          >
+            <OptimizedImage
+              src={post.src}
+              alt={post.alt}
+              fill
+              sizes="(max-width: 768px) 33vw, 16vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+              <MaterialIcon name="favorite" className="text-white" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function NewsletterSection() {
+  return (
+    <section className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop md:py-section-gap">
+      <div className="rounded-3xl bg-primary p-10 text-center text-on-primary md:p-20">
+        <h2 className="mb-6 font-headline-lg text-headline-lg">
+          Join Our Creative Community
+        </h2>
+        <p className="mx-auto mb-8 max-w-xl font-body-md text-on-primary-container md:mb-12">
+          Get exclusive access to new atelier releases, creative prompts, and
+          design stories delivered to your inbox.
+        </p>
+        <a
+          href="mailto:support@thefinepixel.com?subject=Newsletter%20signup"
+          className="premium-lift inline-flex h-auto items-center justify-center rounded-lg bg-white px-8 py-4 font-label-md text-primary transition-colors hover:bg-secondary-fixed hover:text-primary"
+        >
+          Email us to join the list
+        </a>
+      </div>
+    </section>
+  );
+}

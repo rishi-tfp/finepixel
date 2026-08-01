@@ -8,6 +8,8 @@ import {
   WHATSAPP_QUOTE_MESSAGE,
 } from "@/lib/whatsapp";
 
+export { CustomizerSection } from "@/components/home/customizer-section";
+
 export function HomeHero() {
   return (
     <section className="relative mx-auto max-w-container-max overflow-hidden md:flex md:min-h-[921px] md:items-center md:px-margin-desktop md:py-section-gap">
@@ -61,93 +63,7 @@ export function HomeHero() {
   );
 }
 
-const series = [
-  {
-    title: "Designer",
-    href: "/collections",
-    src: images.designer,
-    alt: "High-definition product shot of a navy blue hardcover designer notebook with gold foil stamping.",
-  },
-  {
-    title: "Spiral",
-    href: "/collections?edition=softcover",
-    src: images.spiral,
-    alt: "A premium spiral-bound diary featuring metallic gold coils.",
-  },
-  {
-    title: "Corporate",
-    href: "/corporate",
-    src: images.corporate,
-    alt: "Sophisticated black leather-bound corporate notebooks stacked in a professional boardroom setting.",
-  },
-  {
-    title: "Student",
-    href: "/collections",
-    src: images.student,
-    alt: "Vibrant yet minimalist student notebook on a light wood desk.",
-  },
-  {
-    title: "Personalized",
-    href: "/#customizer",
-    src: images.personalized,
-    alt: "Macro shot of a personalized notebook featuring a gold-foiled name on the cover.",
-  },
-] as const;
-
-export function CuratedSeries() {
-  return (
-    <section
-      className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop md:py-section-gap"
-      id="collections"
-    >
-      <div className="mb-8 flex items-end justify-between md:mb-16">
-        <div className="space-y-2">
-          <h2 className="font-headline-lg text-headline-lg md:mb-4">
-            Curated Series
-          </h2>
-          <p className="font-body-md text-on-surface-variant">
-            Find the perfect companion for your creative workflow.
-          </p>
-        </div>
-        <Link
-          href="/collections"
-          className="hidden font-label-md text-secondary underline-offset-8 hover:underline md:inline"
-        >
-          View All Series
-        </Link>
-      </div>
-      <div className="hide-scrollbar -mx-margin-mobile flex gap-gutter overflow-x-auto px-margin-mobile md:mx-0 md:grid md:grid-cols-5 md:gap-6 md:overflow-visible md:px-0">
-        {series.map((item) => (
-          <Link
-            key={item.title}
-            href={item.href}
-            className="group relative aspect-[3/4] w-64 flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl md:w-auto"
-          >
-            <div className="absolute inset-0 z-10 bg-black/30 transition-all duration-500 group-hover:bg-black/40" />
-            <OptimizedImage
-              src={item.src}
-              alt={item.alt}
-              fill
-              sizes="(max-width: 768px) 256px, 20vw"
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-            <div className="absolute bottom-6 left-6 z-20">
-              <h3 className="font-headline-md text-headline-md text-white">
-                {item.title}
-              </h3>
-            </div>
-          </Link>
-        ))}
-      </div>
-      <Link
-        href="/collections"
-        className="mt-4 inline-block font-label-md text-secondary underline underline-offset-8 md:hidden"
-      >
-        View All Series
-      </Link>
-    </section>
-  );
-}
+/* Curated Series temporarily hidden — homepage uses Atelier Drop instead. */
 
 const qualities = [
   {
@@ -209,96 +125,6 @@ export function EssenceOfQuality() {
               <p className="font-caption text-on-surface-variant">{q.desc}</p>
             </div>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function CustomizerSection() {
-  return (
-    <section
-      className="overflow-hidden bg-surface-container py-16 md:py-section-gap"
-      id="customizer"
-    >
-      <div className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
-        <div className="grid grid-cols-1 items-center gap-gutter lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <h2 className="mb-8 font-headline-lg text-headline-lg">
-              Your Story, Your Design.
-            </h2>
-            <div className="space-y-12">
-              {(
-                [
-                  {
-                    step: "1",
-                    active: true,
-                    title: "Share Your Idea",
-                    desc: "Tell us the name, initials, logo, artwork, or message you want on your notebook.",
-                  },
-                  {
-                    step: "2",
-                    active: false,
-                    title: "Chat on WhatsApp",
-                    desc: "Message our team on WhatsApp. We’ll refine the details with you and confirm what’s possible.",
-                  },
-                  {
-                    step: "3",
-                    active: false,
-                    title: "Approve & Order",
-                    desc: "Review mockups from our team, then place your personalized order through WhatsApp.",
-                  },
-                ] as const
-              ).map((item) => (
-                <div key={item.step} className="flex gap-6">
-                  <span
-                    className={
-                      item.active
-                        ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary font-bold text-on-primary"
-                        : "flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary font-bold text-primary"
-                    }
-                  >
-                    {item.step}
-                  </span>
-                  <div>
-                    <h4 className="mb-2 font-label-md text-label-md">
-                      {item.title}
-                    </h4>
-                    <p className="font-body-md text-on-surface-variant">
-                      {item.desc}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <a
-              href={
-                getWhatsAppOrderUrl() ??
-                "https://api.whatsapp.com/send?text=" +
-                  encodeURIComponent(
-                    "Hi! I'd like to order a customized Fine Pixel notebook.",
-                  )
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              className="premium-lift mt-12 inline-flex h-auto w-full items-center justify-center rounded-lg bg-primary px-10 py-4 font-label-md text-on-primary transition-opacity hover:opacity-90 md:mt-16 sm:w-auto"
-            >
-              Customize on WhatsApp
-            </a>
-          </div>
-          <div className="lg:col-span-7">
-            <div className="relative rounded-3xl bg-white p-4 shadow-2xl md:p-8">
-              <div className="relative aspect-video w-full overflow-hidden rounded-2xl">
-                <OptimizedImage
-                  src={images.customizer}
-                  alt="A Fine Pixel notebook ready for personalization — chat with us on WhatsApp to customize yours."
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 58vw"
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

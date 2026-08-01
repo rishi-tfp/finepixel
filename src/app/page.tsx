@@ -3,9 +3,9 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { RevealObserver } from "@/components/shared/reveal-observer";
 import { BestSellers } from "@/components/home/community-favorites";
 import { ReviewsSection } from "@/components/home/reviews-section";
+import { AtelierDropSection } from "@/components/home/atelier-drop-section";
 import {
   HomeHero,
-  CuratedSeries,
   EssenceOfQuality,
   CustomizerSection,
   LifestyleGallery,
@@ -21,7 +21,7 @@ export default function HomePage() {
       <SiteHeader variant="home" />
       <main className="space-y-20 pb-8 pt-[72px] md:space-y-0 md:pb-0 md:pt-20">
         <HomeHero />
-        <CuratedSeries />
+        <AtelierDropSection />
         <EssenceOfQuality />
         <BestSellers />
         <CustomizerSection />

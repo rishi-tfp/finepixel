@@ -11,6 +11,7 @@ import { images } from "@/lib/images";
 import { localProducts } from "@/lib/products";
 import type { CatalogProduct, EditionKey } from "@/lib/shopify/mappers";
 import { cn } from "@/lib/utils";
+import { getWhatsAppOrderUrl } from "@/lib/whatsapp";
 
 type EditionTab = "all" | EditionKey;
 type SortKey = "featured" | "price-asc" | "price-desc" | "newest";
@@ -255,33 +256,11 @@ export function CollectionsContent() {
             <h1 className="mb-4 font-display-lg text-display-lg-mobile leading-tight text-primary md:text-display-lg">
               The 2024 Archival Collection
             </h1>
-            <p className="mb-8 max-w-lg font-body-lg text-body-lg text-on-surface-variant">
+            <p className="max-w-lg font-body-lg text-body-lg text-on-surface-variant">
               Refined tools for the focused mind. Explore our latest suite of
               notebooks, designed with FSC-certified paper and artisanal
               binding.
             </p>
-            <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
-              <Button
-                onClick={() => {
-                  setEdition("all");
-                  setSizes([]);
-                }}
-                className="h-auto rounded-lg bg-primary px-8 py-4 font-label-md uppercase tracking-wider text-on-primary transition-colors duration-300 hover:bg-on-surface-variant"
-              >
-                Shop All
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setEdition("all");
-                  setSizes([]);
-                  setSort("newest");
-                }}
-                className="h-auto rounded-lg border-primary bg-transparent px-8 py-4 font-label-md uppercase tracking-wider text-primary transition-colors duration-300 hover:bg-primary hover:text-on-primary"
-              >
-                New Arrivals
-              </Button>
-            </div>
           </div>
         </div>
       </section>
@@ -432,14 +411,21 @@ export function CollectionsContent() {
             Join the Intentional Creator List
           </h2>
           <p className="mx-auto mb-10 max-w-xl font-body-lg text-body-lg text-on-surface-variant">
-            Get early access to special editions and monthly creative prompts
-            delivered to your inbox.
+            Message us for early access to special editions and monthly creative
+            prompts — we reply personally on WhatsApp.
           </p>
           <a
-            href="mailto:support@thefinepixel.com?subject=Creator%20list%20signup"
+            href={
+              getWhatsAppOrderUrl(
+                "Hi! I'd like to join the Intentional Creator List for early access to special editions.",
+              ) ??
+              "mailto:support@thefinepixel.com?subject=Creator%20list%20signup"
+            }
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex h-auto items-center justify-center rounded-lg bg-primary px-10 py-4 font-label-md uppercase tracking-wider text-on-primary transition-opacity hover:opacity-90"
           >
-            Email us to join the list
+            Chat with us on WhatsApp
           </a>
         </div>
       </section>

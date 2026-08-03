@@ -14,7 +14,7 @@ export default function AccountPage() {
   return (
     <>
       <SiteHeader variant="product" />
-      <main className="mx-auto max-w-container-max px-margin-mobile pb-28 pt-24 md:px-margin-desktop md:pb-section-gap md:pt-32">
+      <main className="mx-auto w-full min-w-0 max-w-container-max px-margin-mobile pb-28 pt-24 md:px-margin-desktop md:pb-section-gap md:pt-32">
         <AccountPanel />
       </main>
       <SiteFooter />

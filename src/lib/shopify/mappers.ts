@@ -110,6 +110,33 @@ export function resolveEdition(input: {
   return "softcover";
 }
 
+const EDITION_LABEL: Record<EditionKey, string> = {
+  hardcover: "Hardcover",
+  softcover: "Softcover",
+  special: "Special Edition",
+  accessories: "Accessories",
+};
+
+/** Only intentional merchandising badges — never raw Shopify tags like "cute". */
+export function resolveBadge(tags: string[] = []): string | undefined {
+  const joined = tags.join(" ");
+  if (/best[-_\s]?sellers?/i.test(joined)) return "Bestseller";
+  if (/limited[-_\s]?edition/i.test(joined) || /\blimited\b/i.test(joined)) {
+    return "Limited Edition";
+  }
+  if (/new[-_\s]?release|\bnew\b/i.test(joined)) return "New Release";
+  if (/artisan/i.test(joined)) return "Artisan Crafted";
+  return undefined;
+}
+
+function resolveDetail(productType: string | undefined, edition: EditionKey) {
+  const type = productType?.trim();
+  if (type && !/^(notebooks?|journals?)$/i.test(type)) {
+    return type;
+  }
+  return EDITION_LABEL[edition];
+}
+
 export function mapShopifyProduct(node: ShopifyProductNode): CatalogProduct {
   const tags = node.tags ?? [];
   const variants =
@@ -141,6 +168,7 @@ export function mapShopifyProduct(node: ShopifyProductNode): CatalogProduct {
     productType: node.productType,
     title: node.title,
   });
+  const detail = resolveDetail(node.productType, edition);
 
   return {
     id: node.id,
@@ -152,11 +180,9 @@ export function mapShopifyProduct(node: ShopifyProductNode): CatalogProduct {
     currencyCode: currency,
     image: images[0] ?? "",
     images,
-    detail: node.productType || undefined,
-    badge: tags.find((tag) => /best[-_\s]?sellers?/i.test(tag))
-      ? "Bestseller"
-      : tags[0],
-    category: node.productType || tags[0],
+    detail,
+    badge: resolveBadge(tags),
+    category: detail,
     tags,
     edition,
     publishedAt: node.publishedAt ?? undefined,

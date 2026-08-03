@@ -191,11 +191,11 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-on-surface font-body-md antialiased;
-  }
   html {
-    @apply scroll-smooth;
+    @apply max-w-full scroll-smooth overflow-x-clip;
+  }
+  body {
+    @apply max-w-full overflow-x-clip bg-background text-on-surface font-body-md antialiased;
   }
 }
 
@@ -411,6 +411,29 @@
   border-color: #111111;
   outline: none;
   box-shadow: none;
+}
+
+/* Kill browser yellow autofill / focus fill inside the search field */
+.product-search-input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.product-search-input:focus,
+.product-search-input:focus-visible {
+  outline: none;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+.product-search-input:-webkit-autofill,
+.product-search-input:-webkit-autofill:hover,
+.product-search-input:-webkit-autofill:focus,
+.product-search-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #1b1c1c;
+  caret-color: #1b1c1c;
+  /* Paint over Chrome/Safari’s yellow autofill fill */
+  box-shadow: 0 0 0 1000px #f5f3f3 inset;
+  transition: background-color 99999s ease-out;
 }
 
 .no-scrollbar {

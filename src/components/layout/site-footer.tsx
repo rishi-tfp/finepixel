@@ -40,8 +40,8 @@ const SOCIAL = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto w-full border-t border-outline-variant bg-surface-container-lowest px-margin-mobile pt-16 pb-28 md:px-margin-desktop md:pt-section-gap md:pb-12">
-      <div className="mx-auto grid max-w-container-max grid-cols-1 gap-12 md:grid-cols-12 md:gap-gutter">
+    <footer className="mt-auto w-full max-w-full min-w-0 overflow-x-clip border-t border-outline-variant bg-surface-container-lowest px-margin-mobile pt-16 pb-28 md:px-margin-desktop md:pt-section-gap md:pb-12">
+      <div className="mx-auto grid max-w-container-max min-w-0 grid-cols-1 gap-12 md:grid-cols-12 md:gap-gutter">
         <div className="md:col-span-4">
           <Link
             href="/"

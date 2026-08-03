@@ -13,6 +13,9 @@ export const WELCOME_OFFER = {
   discountCode: "WELCOME30",
 } as const;
 
+/** Set after the visitor sees or dismisses the welcome popup — show once per browser. */
+export const WELCOME_OFFER_SEEN_KEY = "tfp-welcome-offer-seen-v1";
+
 export const PROMOTION_MESSAGES = [
   "30% off any 3 notebooks — code WELCOME30",
   "Personalized notebooks, made to order",

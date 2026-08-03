@@ -55,14 +55,18 @@ export function AccountPanel() {
           </p>
         </header>
 
-        <div className="space-y-4 rounded-xl border border-outline-variant/40 bg-surface-container-lowest p-8">
-          <div className="flex justify-between gap-4 text-body-md">
-            <span className="text-on-surface-variant">Name</span>
-            <span className="font-medium text-right">{displayName}</span>
+        <div className="min-w-0 space-y-4 overflow-hidden rounded-xl border border-outline-variant/40 bg-surface-container-lowest p-5 sm:p-8">
+          <div className="flex items-start justify-between gap-3 text-body-md">
+            <span className="shrink-0 text-on-surface-variant">Name</span>
+            <span className="min-w-0 break-words text-right font-medium">
+              {displayName}
+            </span>
           </div>
-          <div className="flex justify-between gap-4 text-body-md">
-            <span className="text-on-surface-variant">Email</span>
-            <span className="font-medium text-right">{customer.email}</span>
+          <div className="flex items-start justify-between gap-3 text-body-md">
+            <span className="shrink-0 text-on-surface-variant">Email</span>
+            <span className="min-w-0 break-all text-right font-medium">
+              {customer.email}
+            </span>
           </div>
           {customer.defaultAddress?.address1 ? (
             <div className="flex justify-between gap-4 text-body-md">

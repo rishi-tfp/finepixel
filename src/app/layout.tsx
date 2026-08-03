@@ -78,7 +78,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-IN"
-      className={`${inter.variable} ${libreCaslon.variable} ${geistMono.variable} scroll-smooth h-full antialiased`}
+      className={`${inter.variable} ${libreCaslon.variable} ${geistMono.variable} h-full max-w-full scroll-smooth overflow-x-clip antialiased`}
     >
       <head>
         <link
@@ -86,7 +86,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block"
         />
       </head>
-      <body className="flex min-h-full flex-col overflow-x-hidden bg-background pt-9 text-on-surface font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+      <body className="flex min-h-full max-w-full flex-col overflow-x-clip bg-background pt-9 text-on-surface font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
         <PromotionExperience />
         <AuthProvider>
           <CartProvider>

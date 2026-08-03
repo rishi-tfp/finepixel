@@ -15,10 +15,13 @@ export function isBestsellerProduct(product: CatalogProduct) {
 }
 
 function detailLine(product: CatalogProduct) {
-  if (product.detail && !/^(notebooks?|journals?)$/i.test(product.detail)) {
-    return product.detail;
+  const line = product.detail ?? product.category;
+  if (!line || /^(notebooks?|journals?)$/i.test(line)) return undefined;
+  // Never surface raw Shopify tags (e.g. "cute", "adulting") as the subtitle.
+  if (product.tags.some((t) => t.toLowerCase() === line.toLowerCase())) {
+    return undefined;
   }
-  return product.category ?? product.tags.find((t) => !BESTSELLER_TAG.test(t));
+  return line;
 }
 
 export function BestSellers() {

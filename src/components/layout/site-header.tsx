@@ -111,25 +111,25 @@ export function SiteHeader({
     <>
       <header
         className={cn(
-          "fixed top-9 z-50 w-full bg-surface/90 shadow-sm backdrop-blur-md",
+          "fixed top-9 z-50 w-full max-w-full overflow-x-clip bg-surface/90 shadow-sm backdrop-blur-md",
           "border-b border-outline-variant/30",
           variant === "home" && "transition-all duration-300",
           variant === "home" && scrolled && "glass-nav",
         )}
       >
         {/* Mobile top bar — hamburger | brand | search + bag (equal side rails) */}
-        <div className="grid h-16 grid-cols-[5.5rem_minmax(0,1fr)_5.5rem] items-center px-margin-mobile md:hidden">
+        <div className="grid h-16 grid-cols-[4.5rem_minmax(0,1fr)_4.5rem] items-center px-3 sm:grid-cols-[5.5rem_minmax(0,1fr)_5.5rem] sm:px-margin-mobile md:hidden">
           <div className="flex justify-start">
             <MobileMenuButton open={mobileOpen} onClick={toggleMobile} />
           </div>
           <Link
             href="/"
             aria-label="The Fine Pixel home"
-            className="min-w-0 justify-self-center text-primary"
+            className="min-w-0 max-w-full justify-self-center overflow-hidden text-primary"
           >
             <BrandLogo
-              className="gap-1.5 text-[16px]"
-              imageClassName="h-8 w-8"
+              className="gap-1.5 text-[15px] sm:text-[16px]"
+              imageClassName="h-7 w-7 sm:h-8 sm:w-8"
             />
           </Link>
           <div className="flex items-center justify-end gap-0.5">

@@ -89,8 +89,8 @@ function isDarkCover(hex: string) {
 
 export function CustomizerSection() {
   const [lookId, setLookId] = useState<LookId>("midnight-gold");
-  const [foilHex, setFoilHex] = useState(LOOKS[0].foil);
-  const [coverHex, setCoverHex] = useState(LOOKS[0].cover);
+  const [foilHex, setFoilHex] = useState<string>(LOOKS[0].foil);
+  const [coverHex, setCoverHex] = useState<string>(LOOKS[0].cover);
   const [displayName, setDisplayName] = useState("");
 
   const look = LOOKS.find((l) => l.id === lookId) ?? LOOKS[0];
@@ -335,7 +335,7 @@ export function CustomizerSection() {
 
               {/* Controls — calm editorial bar */}
               <div className="border-t border-black/[0.05] bg-[#FBF9F7] px-4 py-4 md:px-6 md:py-5">
-                <div className="mb-4 flex gap-1.5 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <div className="mb-4 flex max-w-full min-w-0 gap-1.5 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   {LOOKS.map((item) => (
                     <button
                       key={item.id}

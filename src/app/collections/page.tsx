@@ -14,7 +14,7 @@ export default function CollectionsPage() {
   return (
     <>
       <SiteHeader variant="collections" />
-      <main className="pb-24 pt-[72px] md:pb-0 md:pt-20">
+      <main className="min-w-0 max-w-full overflow-x-clip pb-24 pt-[72px] md:pb-0 md:pt-20">
         <Suspense
           fallback={
             <div className="px-margin-desktop py-section-gap font-body-md text-on-surface-variant">

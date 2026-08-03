@@ -13,7 +13,12 @@ export function BrandLogo({
   showName = true,
 }: BrandLogoProps) {
   return (
-    <span className={cn("inline-flex items-center gap-2", className)}>
+    <span
+      className={cn(
+        "inline-flex min-w-0 max-w-full items-center gap-2",
+        className,
+      )}
+    >
       <Image
         src="/fine-pixel-logo.png"
         alt=""
@@ -23,7 +28,7 @@ export function BrandLogo({
         className={cn("h-9 w-9 shrink-0 object-contain", imageClassName)}
       />
       {showName ? (
-        <span className="whitespace-nowrap font-headline-md font-bold tracking-tight">
+        <span className="truncate font-headline-md font-bold tracking-tight">
           The Fine Pixel
         </span>
       ) : (

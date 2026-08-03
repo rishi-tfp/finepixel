@@ -4,7 +4,11 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BrandLogo } from "@/components/shared/brand-logo";
 import { MaterialIcon } from "@/components/shared/material-icon";
-import { PROMOTION_MESSAGES, WELCOME_OFFER } from "@/lib/promotions";
+import {
+  PROMOTION_MESSAGES,
+  WELCOME_OFFER,
+  WELCOME_OFFER_SEEN_KEY,
+} from "@/lib/promotions";
 
 function PromotionGroup({ hidden = false }: { hidden?: boolean }) {
   return (
@@ -27,17 +31,27 @@ function PromotionGroup({ hidden = false }: { hidden?: boolean }) {
   );
 }
 
+function markWelcomeSeen() {
+  try {
+    localStorage.setItem(WELCOME_OFFER_SEEN_KEY, "1");
+  } catch {
+    /* private mode / blocked storage */
+  }
+}
+
 export function PromotionExperience() {
   const [offerOpen, setOfferOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const closeOffer = useCallback(() => {
+    markWelcomeSeen();
     setOfferOpen(false);
     setCopied(false);
   }, []);
 
   const claimOffer = useCallback(async () => {
+    markWelcomeSeen();
     try {
       await navigator.clipboard.writeText(WELCOME_OFFER.discountCode);
       setCopied(true);
@@ -52,8 +66,10 @@ export function PromotionExperience() {
 
     try {
       localStorage.removeItem("tfp-welcome-offer-coming-soon-v1");
+      if (localStorage.getItem(WELCOME_OFFER_SEEN_KEY) === "1") return;
     } catch {
-      /* ignore */
+      /* if storage unavailable, skip popup to avoid repeating every load */
+      return;
     }
 
     const timer = window.setTimeout(() => {
@@ -85,11 +101,13 @@ export function PromotionExperience() {
     <>
       <aside
         aria-label="Current promotions"
-        className="fixed inset-x-0 top-0 z-55 flex h-9 items-center overflow-hidden bg-primary text-on-primary"
+        className="fixed inset-x-0 top-0 z-55 w-full max-w-full overflow-x-clip bg-primary text-on-primary"
       >
-        <div className="promotion-marquee flex min-w-max items-center whitespace-nowrap font-label-md text-[11px] uppercase tracking-[0.16em] sm:text-xs">
-          <PromotionGroup />
-          <PromotionGroup hidden />
+        <div className="relative h-9 w-full overflow-hidden">
+          <div className="promotion-marquee absolute inset-y-0 left-0 flex w-max items-center whitespace-nowrap font-label-md text-[11px] uppercase tracking-[0.16em] sm:text-xs">
+            <PromotionGroup />
+            <PromotionGroup hidden />
+          </div>
         </div>
       </aside>
 

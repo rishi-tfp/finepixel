@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { OptimizedImage } from "@/components/shared/optimized-image";
 import { ATELIER_DROP } from "@/lib/atelier-drop";
@@ -34,6 +35,19 @@ export function AtelierDropSection() {
 
   const onLeave = () => setOffset({ x: 0, y: 0 });
 
+  const titleClass = cn(
+    "mb-4 max-w-[12ch] font-headline-lg text-[clamp(1.85rem,3.4vw,2.6rem)] leading-[1.05] text-primary transition-all duration-700",
+    visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+    drop.href ? "underline-offset-4 hover:underline" : null,
+  );
+
+  const titleStyle = {
+    transitionDelay: visible ? "240ms" : "0ms",
+    transform: visible
+      ? `translate3d(${offset.x * 0.15}px, ${offset.y * 0.1}px, 0)`
+      : undefined,
+  } as const;
+
   return (
     <section
       id="atelier-drop"
@@ -59,8 +73,16 @@ export function AtelierDropSection() {
         className="overflow-hidden rounded-[1.75rem] bg-[#F4F1EE] ring-1 ring-black/[0.04]"
       >
         <div className="grid md:grid-cols-12">
-          {/* Clear photo — majority of the stage */}
           <div className="relative aspect-[4/5] overflow-hidden md:col-span-7 md:aspect-auto md:min-h-[480px] lg:min-h-[540px]">
+            {drop.href ? (
+              <Link
+                href={drop.href}
+                className="absolute inset-0 z-[1]"
+                aria-label={`View ${drop.title}`}
+              >
+                <span className="sr-only">View {drop.title}</span>
+              </Link>
+            ) : null}
             <div
               className="absolute inset-[-3%] transition-transform duration-500 ease-out will-change-transform"
               style={{
@@ -77,15 +99,13 @@ export function AtelierDropSection() {
                 quality={92}
               />
             </div>
-            {/* Very light edge only — keep the product readable */}
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-[#F4F1EE]/40"
             />
           </div>
 
-          {/* Interactive text panel — no buttons */}
-          <div className="relative flex flex-col justify-center px-7 py-10 md:col-span-5 md:px-10 md:py-14 lg:px-12">
+          <div className="relative z-[2] flex flex-col justify-center px-7 py-10 md:col-span-5 md:px-10 md:py-14 lg:px-12">
             <p
               className={cn(
                 "mb-3 font-caption text-[11px] tracking-[0.28em] text-on-surface-variant uppercase transition-all duration-700",
@@ -112,22 +132,15 @@ export function AtelierDropSection() {
               </span>
             </p>
 
-            <h3
-              className={cn(
-                "mb-4 max-w-[12ch] font-headline-lg text-[clamp(1.85rem,3.4vw,2.6rem)] leading-[1.05] text-primary transition-all duration-700",
-                visible
-                  ? "translate-y-0 opacity-100"
-                  : "translate-y-4 opacity-0",
-              )}
-              style={{
-                transitionDelay: visible ? "240ms" : "0ms",
-                transform: visible
-                  ? `translate3d(${offset.x * 0.15}px, ${offset.y * 0.1}px, 0)`
-                  : undefined,
-              }}
-            >
-              {drop.title}
-            </h3>
+            {drop.href ? (
+              <Link href={drop.href} className={titleClass} style={titleStyle}>
+                {drop.title}
+              </Link>
+            ) : (
+              <h3 className={titleClass} style={titleStyle}>
+                {drop.title}
+              </h3>
+            )}
 
             <p
               className={cn(

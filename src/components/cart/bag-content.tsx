@@ -165,8 +165,8 @@ export function BagContent() {
   const unavailableItems = items.filter((item) => item.available === false);
 
   return (
-    <div className="grid gap-12 lg:grid-cols-12">
-      <div className="lg:col-span-7">
+    <div className="grid min-w-0 gap-10 lg:grid-cols-12 lg:gap-12">
+      <div className="min-w-0 lg:col-span-7">
         <h1 className="mb-2 font-headline-lg text-headline-lg text-primary">
           Your Bag
         </h1>
@@ -185,9 +185,9 @@ export function BagContent() {
           {items.map((item) => (
             <div
               key={item.lineId}
-              className="flex gap-4 border-b border-outline-variant/40 pb-6"
+              className="flex min-w-0 gap-3 border-b border-outline-variant/40 pb-6 sm:gap-4"
             >
-              <div className="relative h-28 w-24 shrink-0 overflow-hidden rounded-lg bg-surface-container">
+              <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-lg bg-surface-container sm:h-28 sm:w-24">
                 <Image
                   src={item.image}
                   alt={item.title}
@@ -197,19 +197,19 @@ export function BagContent() {
                 />
               </div>
               <div className="flex min-w-0 flex-1 flex-col justify-between">
-                <div>
+                <div className="min-w-0">
                   <Link
                     href={`/products/${item.handle}`}
-                    className="font-headline-sm text-headline-sm text-primary hover:underline"
+                    className="break-words font-headline-sm text-headline-sm text-primary hover:underline"
                   >
                     {item.title}
                   </Link>
                   {item.variantTitle ? (
-                    <p className="mt-1 font-caption text-on-surface-variant">
+                    <p className="mt-1 break-words font-caption text-on-surface-variant">
                       {item.variantTitle}
                     </p>
                   ) : item.detail ? (
-                    <p className="mt-1 font-caption text-on-surface-variant">
+                    <p className="mt-1 break-words font-caption text-on-surface-variant">
                       {item.detail}
                     </p>
                   ) : null}
@@ -222,7 +222,7 @@ export function BagContent() {
                     {formatCartMoney(item.priceAmount, item.currencyCode)}
                   </p>
                 </div>
-                <div className="mt-3 flex items-center justify-between gap-4">
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2 rounded-lg border border-outline-variant/50 px-2">
                     <button
                       type="button"
@@ -263,20 +263,24 @@ export function BagContent() {
         </div>
       </div>
 
-      <div className="lg:sticky lg:top-32 lg:col-span-5">
-        <div className="luxury-shadow rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-8">
-          <h2 className="mb-8 font-headline-md text-headline-md">Summary</h2>
+      <div className="min-w-0 lg:sticky lg:top-32 lg:col-span-5">
+        <div className="luxury-shadow min-w-0 overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-5 sm:p-8">
+          <h2 className="mb-6 font-headline-md text-headline-md sm:mb-8">
+            Summary
+          </h2>
           <div className="mb-6 space-y-3">
-            <div className="flex justify-between text-body-md">
-              <span className="text-on-surface-variant">Subtotal</span>
-              <span>{formatCartMoney(subtotal, currencyCode)}</span>
+            <div className="flex items-start justify-between gap-3 text-body-md">
+              <span className="shrink-0 text-on-surface-variant">Subtotal</span>
+              <span className="min-w-0 text-right tabular-nums">
+                {formatCartMoney(subtotal, currencyCode)}
+              </span>
             </div>
             {appliedDiscount && appliedDiscount.discountTotal > 0 ? (
-              <div className="flex justify-between text-body-md">
-                <span className="text-secondary">
+              <div className="flex items-start justify-between gap-3 text-body-md">
+                <span className="min-w-0 break-words text-secondary">
                   Discount ({appliedDiscount.code})
                 </span>
-                <span className="font-medium text-secondary">
+                <span className="shrink-0 text-right font-medium text-secondary tabular-nums">
                   −
                   {formatCartMoney(
                     appliedDiscount.discountTotal,
@@ -285,15 +289,15 @@ export function BagContent() {
                 </span>
               </div>
             ) : null}
-            <div className="flex justify-between text-body-md">
-              <span className="text-on-surface-variant">Shipping</span>
-              <span className="font-medium text-secondary">
+            <div className="flex items-start justify-between gap-3 text-body-md">
+              <span className="shrink-0 text-on-surface-variant">Shipping</span>
+              <span className="min-w-0 text-right font-medium text-secondary">
                 Calculated at checkout
               </span>
             </div>
-            <div className="flex items-end justify-between border-t border-outline-variant pt-4">
+            <div className="flex items-end justify-between gap-3 border-t border-outline-variant pt-4">
               <span className="font-headline-md text-headline-md">Total</span>
-              <span className="font-headline-md text-headline-md">
+              <span className="min-w-0 text-right font-headline-md text-headline-md tabular-nums">
                 {formatCartMoney(displayTotal, displayCurrency)}
               </span>
             </div>
@@ -307,7 +311,7 @@ export function BagContent() {
               <MaterialIcon name="sell" className="text-base" />
               Coupon code
             </label>
-            <div className="flex gap-2">
+            <div className="flex min-w-0 flex-col gap-2 sm:flex-row">
               <input
                 id="bag-discount-code"
                 type="text"
@@ -326,7 +330,7 @@ export function BagContent() {
                   }
                 }}
                 placeholder={`e.g. ${WELCOME_OFFER.discountCode}`}
-                className="min-w-0 flex-1 rounded-lg border border-outline-variant/50 bg-surface-container-lowest px-4 py-3 font-body-md tracking-wide text-primary outline-none transition-colors placeholder:text-on-surface-variant/50 focus:border-primary disabled:opacity-70"
+                className="min-w-0 w-full flex-1 rounded-lg border border-outline-variant/50 bg-surface-container-lowest px-3 py-3 font-body-md tracking-wide text-primary outline-none transition-colors placeholder:text-on-surface-variant/50 focus:border-primary disabled:opacity-70 sm:px-4"
               />
               {appliedDiscount ? (
                 <button
@@ -387,12 +391,12 @@ export function BagContent() {
             type="button"
             onClick={handleCheckout}
             disabled={isCheckingOut || unavailableItems.length > 0}
-            className="luxury-shadow flex w-full items-center justify-center space-x-2 rounded-lg bg-primary py-5 font-label-md text-label-md text-on-primary transition-colors duration-300 hover:bg-on-surface-variant disabled:opacity-60"
+            className="luxury-shadow flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-5 font-label-md text-label-md text-on-primary transition-colors duration-300 hover:bg-on-surface-variant disabled:opacity-60"
           >
-            <span>
+            <span className="text-center">
               {isCheckingOut ? "Redirecting…" : "Proceed to Checkout"}
             </span>
-            <MaterialIcon name="arrow_forward" className="text-base" />
+            <MaterialIcon name="arrow_forward" className="shrink-0 text-base" />
           </button>
           <p className="mt-3 text-center font-caption text-on-surface-variant">
             You’ll continue on our secure checkout.

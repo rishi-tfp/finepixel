@@ -13,7 +13,7 @@ export default function BagPage() {
   return (
     <>
       <SiteHeader variant="product" />
-      <main className="mx-auto max-w-container-max px-margin-mobile pb-28 pt-24 md:px-margin-desktop md:pb-section-gap md:pt-32">
+      <main className="mx-auto w-full max-w-container-max min-w-0 px-margin-mobile pb-28 pt-24 md:px-margin-desktop md:pb-section-gap md:pt-32">
         <BagContent />
       </main>
       <SiteFooter />

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { OptimizedImage } from "@/components/shared/optimized-image";
 import { MaterialIcon } from "@/components/shared/material-icon";
 import { images } from "@/lib/images";
@@ -259,13 +258,6 @@ export function AboutSection() {
               is as kind to the planet as it is inspiring to you.
             </p>
           </div>
-          <button
-            type="button"
-            className="mt-0 flex items-center gap-2 font-label-md text-primary underline underline-offset-8 transition-all hover:gap-4 md:mt-12"
-          >
-            Read Our Full Story{" "}
-            <MaterialIcon name="arrow_right_alt" />
-          </button>
         </div>
         <div className="relative order-2 aspect-[4/5] overflow-hidden rounded-2xl shadow-xl md:rounded-3xl">
           <OptimizedImage
@@ -281,6 +273,8 @@ export function AboutSection() {
   );
 }
 
+const INSTAGRAM_URL = "https://www.instagram.com/thefinepixel/";
+
 const igPosts = [
   { src: images.ig1, alt: "Instagram post showing a flatlay of a notebook and a coffee cup." },
   { src: images.ig2, alt: "Instagram post showing a personalized notebook with gold lettering." },
@@ -293,22 +287,28 @@ const igPosts = [
 export function InstagramSection() {
   return (
     <section className="md:py-section-gap">
-      <div className="mx-auto mb-8 flex max-w-container-max items-center justify-between px-margin-mobile md:mb-12 md:px-margin-desktop">
-        <h2 className="font-headline-md text-headline-md">@thefinepixel</h2>
+      <div className="mx-auto mb-8 flex max-w-container-max min-w-0 flex-wrap items-center justify-between gap-x-4 gap-y-2 px-margin-mobile md:mb-12 md:px-margin-desktop">
+        <h2 className="min-w-0 font-headline-md text-headline-md">
+          @thefinepixel
+        </h2>
         <a
-          href="https://www.instagram.com/thefinepixel/"
+          href={INSTAGRAM_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-label-md text-secondary hover:underline"
+          className="shrink-0 font-label-md text-secondary hover:underline"
         >
           Follow Our Journey
         </a>
       </div>
       <div className="grid grid-cols-3 gap-1 md:grid-cols-6 md:gap-2">
         {igPosts.map((post) => (
-          <div
+          <a
             key={post.src}
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="group relative aspect-square overflow-hidden"
+            aria-label="Open @thefinepixel on Instagram"
           >
             <OptimizedImage
               src={post.src}
@@ -320,7 +320,7 @@ export function InstagramSection() {
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
               <MaterialIcon name="favorite" className="text-white" />
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </section>
@@ -328,21 +328,29 @@ export function InstagramSection() {
 }
 
 export function NewsletterSection() {
+  const communityHref =
+    getWhatsAppOrderUrl(
+      "Hi! I'd like to join The Fine Pixel creative community and hear about new releases.",
+    ) ??
+    "mailto:support@thefinepixel.com?subject=Join%20the%20creative%20community";
+
   return (
     <section className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop md:py-section-gap">
-      <div className="rounded-3xl bg-primary p-10 text-center text-on-primary md:p-20">
+      <div className="rounded-3xl bg-primary p-6 text-center text-on-primary sm:p-10 md:p-20">
         <h2 className="mb-6 font-headline-lg text-headline-lg">
           Join Our Creative Community
         </h2>
         <p className="mx-auto mb-8 max-w-xl font-body-md text-on-primary-container md:mb-12">
-          Get exclusive access to new atelier releases, creative prompts, and
-          design stories delivered to your inbox.
+          Message us for early looks at atelier releases, creative prompts, and
+          design stories — we reply personally.
         </p>
         <a
-          href="mailto:support@thefinepixel.com?subject=Newsletter%20signup"
+          href={communityHref}
+          target="_blank"
+          rel="noopener noreferrer"
           className="premium-lift inline-flex h-auto items-center justify-center rounded-lg bg-white px-8 py-4 font-label-md text-primary transition-colors hover:bg-secondary-fixed hover:text-primary"
         >
-          Email us to join the list
+          Chat with us on WhatsApp
         </a>
       </div>
     </section>

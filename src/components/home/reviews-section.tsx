@@ -276,11 +276,11 @@ export function ReviewsSection() {
             No reflections yet. Be the first to share yours.
           </p>
         ) : (
-          <div className="hide-scrollbar flex gap-gutter overflow-x-auto px-margin-mobile md:grid md:grid-cols-3 md:overflow-visible md:px-0">
+          <div className="hide-scrollbar flex w-full max-w-full min-w-0 gap-gutter overflow-x-auto px-margin-mobile md:grid md:grid-cols-3 md:overflow-visible md:px-0">
             {reviews.map((review) => (
               <article
                 key={review.id}
-                className="w-80 flex-shrink-0 rounded-2xl border border-outline-variant/10 bg-white p-8 shadow-sm md:w-auto md:p-10"
+                className="w-72 shrink-0 rounded-2xl border border-outline-variant/10 bg-white p-6 shadow-sm sm:p-8 md:w-auto md:p-10"
               >
                 <div className="mb-6 flex text-secondary">
                   {Array.from({ length: 5 }).map((_, i) => (

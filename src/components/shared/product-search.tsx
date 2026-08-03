@@ -198,13 +198,20 @@ export function ProductSearch({
           aria-expanded={showDropdown}
           aria-controls={listId}
           aria-autocomplete="list"
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
+          inputMode="search"
+          enterKeyHint="search"
           className={cn(
-            "w-32 border-none bg-transparent font-label-md text-sm focus:ring-0",
+            "product-search-input w-32 appearance-none border-none bg-transparent font-label-md text-sm text-primary shadow-none outline-none ring-0",
+            "placeholder:text-on-surface-variant focus:border-none focus:bg-transparent focus:shadow-none focus:outline-none focus:ring-0",
             wide && "w-40",
             inputClassName,
           )}
           placeholder={placeholder}
-          type="search"
+          type="text"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);

@@ -200,8 +200,8 @@ export function ProductDetail({
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-gutter lg:grid-cols-12">
-        <div className="flex flex-col gap-6 lg:col-span-7">
+      <div className="grid min-w-0 grid-cols-1 gap-gutter lg:grid-cols-12">
+        <div className="flex min-w-0 flex-col gap-6 lg:col-span-7">
           <div className="group relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-container-low">
             <OptimizedImage
               src={active.src}
@@ -236,7 +236,7 @@ export function ProductDetail({
           </div>
         </div>
 
-        <div className="flex flex-col pt-4 lg:col-span-5 lg:pt-0">
+        <div className="flex min-w-0 flex-col pt-4 lg:col-span-5 lg:pt-0">
           <nav className="mb-6 flex items-center gap-2 font-label-md text-label-md text-on-surface-variant">
             <Link
               href="/collections"

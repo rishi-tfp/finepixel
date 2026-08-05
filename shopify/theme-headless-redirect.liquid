@@ -4,13 +4,33 @@
   Paste into Online Store → Themes → … → Edit code → layout/theme.liquid
   Place as the FIRST thing inside <head> (before other tags).
 
-  Domain: www.thefinepixel.com (apex thefinepixel.com should redirect to www
-  in DNS / Vercel). Update this if the canonical host changes.
+  Why: Shopify checkout “store name / logo” links to the Online Store
+  (myshopify.com), not the Next.js site. This bounces shoppers back to
+  https://www.thefinepixel.com.
+
+  Domain: www.thefinepixel.com (apex should redirect to www in DNS / Vercel).
 {% endcomment %}
 {% assign storefront_url = "https://www.thefinepixel.com" %}
-{% if template.name == "index" or request.page_type == "index" or request.path == "/" %}
-  <meta http-equiv="refresh" content="0; url={{ storefront_url }}/" />
-  <script>
-    window.location.replace({{ storefront_url | json }} + "/");
-  </script>
+{% assign path = request.path | default: "/" %}
+
+{% comment %} Keep customers on the headless site for all theme pages. {% endcomment %}
+{% if path == "/" or path == blank %}
+  {% assign destination = storefront_url | append: "/" %}
+{% elsif path contains "/products/" %}
+  {% assign handle = path | split: "/products/" | last | split: "/" | first %}
+  {% assign destination = storefront_url | append: "/products/" | append: handle %}
+{% elsif path contains "/collections" %}
+  {% assign destination = storefront_url | append: "/collections" %}
+{% elsif path contains "/cart" %}
+  {% assign destination = storefront_url | append: "/bag" %}
+{% else %}
+  {% assign destination = storefront_url | append: "/" %}
 {% endif %}
+
+<meta http-equiv="refresh" content="0; url={{ destination }}" />
+<script>
+  window.location.replace({{ destination | json }});
+</script>
+<style>
+  html { visibility: hidden; }
+</style>

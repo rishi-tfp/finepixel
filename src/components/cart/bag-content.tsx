@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/components/auth/auth-provider";
 import {
   formatCartMoney,
   useCart,
@@ -31,7 +30,6 @@ export function BagContent() {
     removeItem,
     isCheckingOut,
   } = useCart();
-  const { customer } = useAuth();
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [discountInput, setDiscountInput] = useState("");
   const [appliedDiscount, setAppliedDiscount] =
@@ -369,19 +367,6 @@ export function BagContent() {
             ) : null}
           </div>
 
-          {customer ? (
-            <p className="mb-4 text-center font-caption text-on-surface-variant">
-              Checking out as{" "}
-              <span className="font-medium text-primary">{customer.email}</span>
-            </p>
-          ) : (
-            <p className="mb-4 text-center font-caption text-on-surface-variant">
-              <Link href="/account" className="underline hover:text-primary">
-                Sign in
-              </Link>{" "}
-              for a faster checkout
-            </p>
-          )}
           {checkoutError ? (
             <p className="mb-4 text-center font-caption text-error">
               {checkoutError}

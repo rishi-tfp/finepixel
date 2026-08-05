@@ -7,7 +7,6 @@ import {
 } from "@/lib/shopify/cart";
 import { clearCartId, getCartId, setCartId } from "@/lib/shopify/cart-session";
 import { isShopifyEnabled } from "@/lib/shopify/config";
-import { getCustomerSession } from "@/lib/shopify/session";
 import type { CartLineInput } from "@/lib/shopify/types";
 import { isValidVariantId } from "@/lib/shopify/validate";
 
@@ -23,15 +22,6 @@ function cartResponse(cart: ShopifyCartResult) {
     discountTotal: cart.discountTotal,
     appliedDiscountCodes: cart.appliedDiscountCodes,
     lines: cart.lines,
-  };
-}
-
-async function buyerIdentityFromSession() {
-  const session = await getCustomerSession().catch(() => null);
-  if (!session) return undefined;
-  return {
-    email: session.customer.email,
-    customerAccessToken: session.accessToken,
   };
 }
 
@@ -116,7 +106,6 @@ export async function POST(request: Request) {
       ...(body.attributes?.length ? { attributes: body.attributes } : {}),
     };
 
-    const buyerIdentity = await buyerIdentityFromSession();
     let cartId = await getCartId();
     let cart: ShopifyCartResult;
 
@@ -131,7 +120,7 @@ export async function POST(request: Request) {
     if (cartId) {
       cart = await addLinesToCart(cartId, [line]);
     } else {
-      cart = await createShopifyCart([line], buyerIdentity);
+      cart = await createShopifyCart([line]);
       await setCartId(cart.id);
     }
 

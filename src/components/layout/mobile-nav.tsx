@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef } from "react";
-import { useAuth } from "@/components/auth/auth-provider";
 import { useCart } from "@/components/cart/cart-provider";
 import { BrandLogo } from "@/components/shared/brand-logo";
 import { MaterialIcon } from "@/components/shared/material-icon";
@@ -34,7 +33,6 @@ export function MobileNav({
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
   const prevPathname = useRef(pathname);
-  const { customer } = useAuth();
   const { count } = useCart();
   const whatsappUrl = getWhatsAppOrderUrl();
 
@@ -64,10 +62,6 @@ export function MobileNav({
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [open, onClose, focusSearch]);
-
-  const accountLabel = customer
-    ? customer.firstName || customer.email.split("@")[0]
-    : "Sign in";
 
   return (
     <div
@@ -201,20 +195,6 @@ export function MobileNav({
                   Empty
                 </span>
               )}
-            </Link>
-            <Link
-              href="/account"
-              onClick={onClose}
-              className="flex items-center justify-between rounded-lg px-3 py-3.5 font-label-md text-label-md text-on-surface transition-colors hover:bg-surface-container-low"
-            >
-              <span className="flex items-center gap-3">
-                <MaterialIcon name="person" />
-                {accountLabel}
-              </span>
-              <MaterialIcon
-                name="chevron_right"
-                className="text-on-surface-variant"
-              />
             </Link>
           </div>
         </nav>

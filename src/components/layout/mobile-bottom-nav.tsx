@@ -6,28 +6,33 @@ import { usePathname } from "next/navigation";
 import { MaterialIcon } from "@/components/shared/material-icon";
 import { cn } from "@/lib/utils";
 
-const items = [
+type NavItem = {
+  href: string;
+  label: string;
+  icon: string;
+  match: (path: string, hash: string) => boolean;
+};
+
+const items: NavItem[] = [
   {
     href: "/collections",
     label: "Collections",
     icon: "grid_view",
-    match: (path: string, hash: string) =>
-      path.startsWith("/collections") && !hash,
+    match: (path, hash) => path.startsWith("/collections") && !hash,
   },
   {
     href: "/#customizer",
     label: "Customize",
     icon: "edit_note",
-    match: (path: string, hash: string) =>
-      path === "/" && hash === "#customizer",
+    match: (path, hash) => path === "/" && hash === "#customizer",
   },
   {
-    href: "/account",
-    label: "Account",
-    icon: "person",
-    match: (path: string) => path.startsWith("/account"),
+    href: "/bag",
+    label: "Bag",
+    icon: "shopping_bag",
+    match: (path) => path.startsWith("/bag"),
   },
-] as const;
+];
 
 export function MobileBottomNav() {
   const pathname = usePathname();
@@ -46,12 +51,7 @@ export function MobileBottomNav() {
       aria-label="Primary"
     >
       {items.map((item) => {
-        const active =
-          item.href === "/#customizer"
-            ? item.match(pathname, hash)
-            : item.href === "/collections"
-              ? item.match(pathname, hash)
-              : item.match(pathname);
+        const active = item.match(pathname, hash);
 
         return (
           <Link

@@ -1,6 +1,5 @@
 export const images = {
-  homeHero:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuD6mF0P2E9X0rb3HtFW_wAHEWOm_mJh6yQ3RUDRgm7rn4-0y37cwEBafQ56f6sCV3HcXYm9T4N-vHuHp4av9IpOFdzONimRY-bt0cWYLbPBN4WtiEXAS3cyC1nIG5Hr114wbNntPMGQUNDD7gHgp8msCwbdAYlzIlEmdZWD35-lv0HnGGdA7IhEE6AtRRER0HC1bCC_TzTlAk8sv4rfN3BEs0pDaF1UEDlbs1WRYFpjJpiz4VtYU8K0",
+  homeHero: "/home-hero.png",
   designer:
     "https://lh3.googleusercontent.com/aida-public/AB6AXuAplStAcROGGeUMfpnKf-U_HYpV4kG6UFYVn9myJL-rd2YukZ4bTyJEJ1sLBL9f9U2F10A2drGnIz9XplZc_7FXGp_Ohr-0zipJ9NoIyBvduwvkeT2HSwSlyGFpUsWQmxVEtT4OaaUKhkmNS8EL2TFAGyv-UZIS1ZdHThdQybBcmZ7O8cEfGFU-tKPTPBId1thRy42TwchSm77utcHVkDbdujxd8dxeXtNVhuxCVW7_CgdIRNJjtF2y",
   spiral:

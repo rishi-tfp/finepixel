@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { AccountButton } from "@/components/auth/account-button";
 import { CartButton } from "@/components/cart/cart-button";
 import {
   MobileMenuButton,
@@ -201,14 +200,6 @@ export function SiteHeader({
             ) : null}
 
             <CartButton />
-            <AccountButton
-              className={cn(
-                "transition-all duration-200",
-                variant === "home"
-                  ? "rounded-full p-2 hover:bg-surface-container-low/50"
-                  : "hover:opacity-70",
-              )}
-            />
           </div>
         </div>
       </header>

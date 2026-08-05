@@ -72,16 +72,11 @@ After the domain works, open:
 1. Shopify Admin → **Online Store → Preferences**
 2. Enable **password protection** so customers can’t browse the Liquid shop by accident
 
-### 7. Discount code WELCOME30
+### 8. Discount code WELCOME30
 1. Shopify Admin → **Discounts → Create discount**
 2. Code: `WELCOME30`
 3. Match your offer (e.g. 30% off when buying 3 notebooks)
 4. Save, then test Apply on `/bag`
-
-### 8. Customer login (if login fails)
-1. App scopes: `unauthenticated_read_customers` + `unauthenticated_write_customers` (reinstall/refresh token if needed)
-2. **Settings → Customer accounts** → enable **Legacy / classic** password accounts
-3. Restart / redeploy after token changes
 
 ---
 

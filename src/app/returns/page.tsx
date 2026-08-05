@@ -187,12 +187,12 @@ export default function ReturnsPolicyPage() {
                 <MaterialIcon name="mail" className="text-[18px]" />
                 Contact Us
               </a>
-              <Link
-                href="/account"
+              <a
+                href="mailto:support@thefinepixel.com?subject=Order%20Status%20Enquiry"
                 className="inline-flex w-full items-center justify-center rounded-lg border border-outline-variant px-8 py-3.5 font-label-md text-primary transition-colors hover:border-primary sm:w-auto"
               >
-                View Account
-              </Link>
+                Order Help
+              </a>
             </div>
           </div>
         </section>

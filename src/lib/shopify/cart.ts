@@ -1,6 +1,5 @@
 import { shopifyFetch } from "@/lib/shopify/client";
 import {
-  CART_BUYER_IDENTITY_UPDATE_MUTATION,
   CART_CREATE_MUTATION,
   CART_DISCOUNT_CODES_UPDATE_MUTATION,
   CART_LINES_ADD_MUTATION,
@@ -60,12 +59,6 @@ type CartPayload = {
 };
 
 type UserErrors = { field: string[]; message: string }[];
-
-export type CartBuyerIdentity = {
-  email?: string;
-  customerAccessToken?: string;
-  countryCode?: string;
-};
 
 export type ShopifyCartLine = {
   lineId: string;
@@ -203,21 +196,6 @@ function mapCart(
   };
 }
 
-function buyerIdentityInput(buyerIdentity?: CartBuyerIdentity) {
-  if (!buyerIdentity?.customerAccessToken && !buyerIdentity?.email) {
-    return undefined;
-  }
-  return {
-    ...(buyerIdentity.email ? { email: buyerIdentity.email } : {}),
-    ...(buyerIdentity.customerAccessToken
-      ? { customerAccessToken: buyerIdentity.customerAccessToken }
-      : {}),
-    ...(buyerIdentity.countryCode
-      ? { countryCode: buyerIdentity.countryCode }
-      : {}),
-  };
-}
-
 export async function getShopifyCart(cartId: string) {
   const data = await shopifyFetch<{ cart: CartPayload | null }>(CART_QUERY, {
     cartId,
@@ -228,10 +206,8 @@ export async function getShopifyCart(cartId: string) {
 
 export async function createShopifyCart(
   lines: CartLineInput[] = [],
-  buyerIdentity?: CartBuyerIdentity,
   discountCodes?: string[],
 ): Promise<ShopifyCartResult> {
-  const identity = buyerIdentityInput(buyerIdentity);
   const codes = (discountCodes ?? [])
     .map((code) => code.trim())
     .filter(Boolean);
@@ -241,7 +217,6 @@ export async function createShopifyCart(
   }>(CART_CREATE_MUTATION, {
     input: {
       lines,
-      ...(identity ? { buyerIdentity: identity } : {}),
       ...(codes.length > 0 ? { discountCodes: codes } : {}),
     },
   });
@@ -253,22 +228,19 @@ export async function createShopifyCart(
 export async function createCart(
   variantId: string,
   quantity = 1,
-  buyerIdentity?: CartBuyerIdentity,
   discountCodes?: string[],
 ) {
   return createShopifyCart(
     [{ merchandiseId: variantId, quantity }],
-    buyerIdentity,
     discountCodes,
   );
 }
 
 export async function createCartWithLines(
   lines: CartLineInput[],
-  buyerIdentity?: CartBuyerIdentity,
   discountCodes?: string[],
 ) {
-  return createShopifyCart(lines, buyerIdentity, discountCodes);
+  return createShopifyCart(lines, discountCodes);
 }
 
 export async function addLinesToCart(cartId: string, lines: CartLineInput[]) {
@@ -316,30 +288,4 @@ export async function updateCartDiscountCodes(
     throw new Error("Cart discount update failed");
   }
   return mapCart(data.cartDiscountCodesUpdate.cart, discountCodes[0]);
-}
-
-export async function updateCartBuyerIdentity(
-  cartId: string,
-  buyerIdentity: CartBuyerIdentity,
-) {
-  const identity = buyerIdentityInput(buyerIdentity);
-  if (!identity) {
-    const cart = await getShopifyCart(cartId);
-    if (!cart) throw new Error("Cart not found");
-    return cart;
-  }
-  const data = await shopifyFetch<{
-    cartBuyerIdentityUpdate: {
-      cart: CartPayload | null;
-      userErrors: UserErrors;
-    };
-  }>(CART_BUYER_IDENTITY_UPDATE_MUTATION, {
-    cartId,
-    buyerIdentity: identity,
-  });
-  assertNoErrors(data.cartBuyerIdentityUpdate.userErrors, "buyer identity");
-  if (!data.cartBuyerIdentityUpdate.cart) {
-    throw new Error("Cart buyer update failed");
-  }
-  return mapCart(data.cartBuyerIdentityUpdate.cart);
 }

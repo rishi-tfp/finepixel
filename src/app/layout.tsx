@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, Libre_Caslon_Text, Geist_Mono } from "next/font/google";
-import { AuthProvider } from "@/components/auth/auth-provider";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { PromotionExperience } from "@/components/promotions/promotion-experience";
@@ -88,12 +87,10 @@ export default function RootLayout({
       </head>
       <body className="flex min-h-full max-w-full flex-col overflow-x-clip bg-background pt-9 text-on-surface font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
         <PromotionExperience />
-        <AuthProvider>
-          <CartProvider>
-            {children}
-            <MobileBottomNav />
-          </CartProvider>
-        </AuthProvider>
+        <CartProvider>
+          {children}
+          <MobileBottomNav />
+        </CartProvider>
       </body>
     </html>
   );

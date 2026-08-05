@@ -2,12 +2,10 @@ import { NextResponse } from "next/server";
 import {
   createCartWithLines,
   getShopifyCart,
-  updateCartBuyerIdentity,
   updateCartDiscountCodes,
 } from "@/lib/shopify/cart";
 import { clearCartId, getCartId, setCartId } from "@/lib/shopify/cart-session";
 import { isShopifyEnabled } from "@/lib/shopify/config";
-import { getCustomerSession } from "@/lib/shopify/session";
 import type { CartLineInput } from "@/lib/shopify/types";
 import {
   validateCheckoutLines,
@@ -32,20 +30,11 @@ export async function POST(request: Request) {
     const body = (await request.json().catch(() => ({}))) as CheckoutBody;
     const discountCode = validateDiscountCode(body.discountCode);
 
-    const session = await getCustomerSession().catch(() => null);
-    const buyerIdentity = session
-      ? {
-          email: session.customer.email,
-          customerAccessToken: session.accessToken,
-        }
-      : undefined;
-
     // Buy Now — one-shot cart, does not replace the bag cookie cart
     if (body.lines?.length) {
       validateCheckoutLines(body.lines);
       const cart = await createCartWithLines(
         body.lines,
-        buyerIdentity,
         discountCode ? [discountCode] : undefined,
       );
 
@@ -70,7 +59,6 @@ export async function POST(request: Request) {
         cartId: cart.id,
         checkoutUrl: cart.checkoutUrl,
         totalQuantity: cart.totalQuantity,
-        customerEmail: session?.customer.email ?? null,
       });
     }
 
@@ -84,10 +72,6 @@ export async function POST(request: Request) {
     if (!cart || cart.lines.length === 0) {
       await clearCartId();
       return NextResponse.json({ error: "Your bag is empty" }, { status: 400 });
-    }
-
-    if (buyerIdentity) {
-      cart = await updateCartBuyerIdentity(cartId, buyerIdentity);
     }
 
     if (discountCode) {
@@ -114,7 +98,6 @@ export async function POST(request: Request) {
       cartId: cart.id,
       checkoutUrl: cart.checkoutUrl,
       totalQuantity: cart.totalQuantity,
-      customerEmail: session?.customer.email ?? null,
       discountTotal: cart.discountTotal,
       totalAmount: cart.totalAmount,
       appliedDiscountCodes: cart.appliedDiscountCodes,

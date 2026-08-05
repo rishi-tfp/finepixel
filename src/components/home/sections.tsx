@@ -43,7 +43,7 @@ export function HomeHero() {
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl shadow-xl md:shadow-2xl">
             <OptimizedImage
               src={images.homeHero}
-              alt="Professional high-definition editorial photography of a premium designer notebook on a clean, modern wooden desk. Soft natural lighting, minimal aesthetic, with a cup of specialty coffee and a high-end pen nearby."
+              alt="Fine Pixel navy notebook with gold foil branding on a sunlit desk, beside a handwritten journal and a Write Focus Grow mug."
               fill
               priority
               sizes="(max-width: 768px) 100vw, 50vw"

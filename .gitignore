@@ -43,3 +43,6 @@ next-env.d.ts
 # customer review photo uploads (JSON index is kept in /data)
 /public/uploads/reviews/*
 !/public/uploads/reviews/.gitkeep
+
+.vercel
+.env*

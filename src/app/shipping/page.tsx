@@ -150,12 +150,12 @@ export default function ShippingPolicyPage() {
               >
                 Continue Shopping
               </Link>
-              <Link
-                href="/account"
+              <a
+                href="mailto:support@thefinepixel.com?subject=Shipping%20Enquiry"
                 className="inline-flex w-full items-center justify-center rounded-lg border border-outline-variant px-8 py-3.5 font-label-md text-primary transition-colors hover:border-primary sm:w-auto"
               >
-                View Account
-              </Link>
+                Contact Support
+              </a>
             </div>
           </div>
         </section>

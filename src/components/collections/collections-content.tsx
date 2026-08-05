@@ -3,7 +3,6 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCart } from "@/components/cart/cart-provider";
 import { OptimizedImage } from "@/components/shared/optimized-image";
 import { MaterialIcon } from "@/components/shared/material-icon";
 import { Button } from "@/components/ui/button";
@@ -120,7 +119,6 @@ function parseEditionParam(value: string | null): EditionTab {
 }
 
 export function CollectionsContent() {
-  const { addItem } = useCart();
   const searchParams = useSearchParams();
   const urlQuery = searchParams.get("q") ?? "";
   const urlEdition = parseEditionParam(searchParams.get("edition"));
@@ -338,15 +336,13 @@ export function CollectionsContent() {
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   </Link>
-                  <div className="absolute bottom-0 left-0 hidden w-full translate-y-full p-4 transition-transform duration-300 group-hover:translate-y-0 md:block">
-                    <Button
-                      onClick={() => {
-                        void addItem(product, 1, product.defaultVariantId);
-                      }}
-                      className="h-auto w-full rounded-lg bg-primary py-3 font-label-md tracking-wider text-on-primary uppercase hover:bg-primary"
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent p-3 pt-10 md:p-4 md:pt-12">
+                    <Link
+                      href={`/products/${product.handle}`}
+                      className="pointer-events-auto flex w-full items-center justify-center rounded-lg bg-primary px-3 py-2.5 text-center font-label-md text-[11px] tracking-wider text-on-primary uppercase transition-opacity hover:opacity-90 sm:text-xs md:py-3 md:text-sm"
                     >
-                      Quick Add
-                    </Button>
+                      View Notebook
+                    </Link>
                   </div>
                 </div>
                 <Link

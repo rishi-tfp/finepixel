@@ -17,4 +17,4 @@ Done in app:
 - `error.tsx` / `global-error.tsx`
 - Default OG image; newsletter → email CTA (no fake subscribe)
 
-Still on you (Admin / deploy): Vercel env + domain, theme redirect, WELCOME30, Legacy accounts.
+Still on you (Admin / deploy): theme redirect, WELCOME30.

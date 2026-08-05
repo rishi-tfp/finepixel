@@ -6,7 +6,6 @@ export {
   createShopifyCart,
   getShopifyCart,
   removeCartLines,
-  updateCartBuyerIdentity,
   updateCartDiscountCodes,
   updateCartLines,
 } from "@/lib/shopify/cart";
@@ -23,22 +22,11 @@ export {
   type CatalogProduct,
 } from "@/lib/shopify/mappers";
 export {
-  shopifyCustomerCreate,
-  shopifyCustomerLogin,
-  shopifyCustomerLogout,
-  shopifyGetCustomer,
-} from "@/lib/shopify/customer";
-export {
   CART_CREATE_MUTATION,
   CART_LINES_ADD_MUTATION,
   CART_QUERY,
   PRODUCT_BY_HANDLE_QUERY,
   PRODUCTS_QUERY,
 } from "@/lib/shopify/queries";
-export {
-  clearCustomerSession,
-  getCustomerSession,
-  setCustomerSession,
-} from "@/lib/shopify/session";
 export type { CartLineInput, ShopifyProductNode } from "@/lib/shopify/types";
 export { isValidVariantId, validateCheckoutLines } from "@/lib/shopify/validate";

@@ -56,8 +56,7 @@ export const images = {
     "https://lh3.googleusercontent.com/aida-public/AB6AXuBwdRK4Zcp_oA34Khj1Jdi-g2Zf7LgEPsjHotx8X0Gf3ojw4F2stgDfoOzm4XLFDOx0sq5P4LV-wsGdSVDlNXk-o6bfSoaVHvQWuJsc8CYacW1ILGEL1h2rRScezPPOarxCWD9Pc-X9LWrHfTR1B90znBb0QSDoWtK6vm3pKt5yq_d6NXZnyNKQhFUmCpiZ6nk3-pcUFj5SjCctrqFAWCRatA70EK-I6k83ikZePY2xG8owBhs2p3B-",
   brassTrio:
     "https://lh3.googleusercontent.com/aida-public/AB6AXuCHj2HdDbEBniF39qwk-U0lH5rC-ctWBwNMcx-377nWIR3xBIeadG7h62KheMUX78fx8N89bNRrg57j5MNIIZEyys4VlGPd2EY_cLhlyZY9nGvcPwzsMjaEflcp3s5vUoM3zfLHDWQu6Xa1_fpolMCz6g_0rqZ5jce9E0_CrN8G5NH7K09HStWQOdnYP_Wfnc-wAhwObvj5ixYji_wn746qGgH2pJifAuX0aIQIYajYXvJu-lMARaYG",
-  collectionsHero:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCShGSLEznYIBMWH-yFC-rKrbda3YbWO6UJFp8wQZGkesNHbqIGEQgLwINZlI6xtKTY0FpX5exVpaU3_e5bTdEJA-4i0sZRTTNS8rdkm9L_HSw8aeBEv5DDUtUX_FC5fuBw07QceFZXioFGEh13FK7xkm-Y_Unbp_P2COt192Lp1Img_tyzNWT3ETrG1zpKglFWJaR2MYkC1EKqaAsdaKi3EKRbtjeS7fWkCLQvb9Jg2dQmdwrFfT2Y",
+  collectionsHero: "/collections-hero-v2.png",
   dailySoftcover:
     "https://lh3.googleusercontent.com/aida-public/AB6AXuBpz2vcC4Y6kqcnwkWvEfLAz3OCqjMzjFi2I0ChcCqDKTEre9MtiTVwftL53PctfTW1wFfePpFlj_aTsU9qX4L2boN-04TBi-q0H7Pu9pxpw0-o8BiSaGn_t1SwQtc0-FXl2ekW9Mw1ZvdX4nnQ-wc79Y2ETajY-iDJxhSFMI-lUtlUPyIMt8XbZfWr7O5UEmwT5N_QdE91CnvGvdLxC_Af3jbAQIR91S7HVt8T0P1eatkpbtRdzXYk",
   celestial:

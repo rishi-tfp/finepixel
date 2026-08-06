@@ -56,7 +56,7 @@ export function AtelierDropSection() {
     >
       <div className="mb-6 md:mb-8">
         <p className="mb-2 font-label-md text-[11px] tracking-[0.28em] text-secondary uppercase">
-          Monthly unveiling
+          This month’s highlight
         </p>
         <h2
           id="atelier-drop-title"

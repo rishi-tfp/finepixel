@@ -5,7 +5,7 @@
 export type AtelierDrop = {
   /** e.g. "August 2026" */
   monthLabel: string;
-  status: "Coming this month" | "Now available" | "Limited preview";
+  status: "Coming soon" | "Coming this month" | "Now available" | "Limited preview";
   title: string;
   subtitle: string;
   image: string;
@@ -16,15 +16,13 @@ export type AtelierDrop = {
 };
 
 export const ATELIER_DROP: AtelierDrop = {
-  monthLabel: "August 2026",
-  status: "Now available",
-  title: "Midnight Bronze Spiral",
+  monthLabel: "Next release",
+  status: "Coming soon",
+  title: "A new exclusive design",
   subtitle:
-    "A quiet dark cover with warm bronze foil — unveiled here as this month’s atelier focus.",
+    "We’re finishing a special notebook made only for this drop. It will appear here as soon as it’s ready to shop.",
   image:
     "https://lh3.googleusercontent.com/aida-public/AB6AXuAplStAcROGGeUMfpnKf-U_HYpV4kG6UFYVn9myJL-rd2YukZ4bTyJEJ1sLBL9f9U2F10A2drGnIz9XplZc_7FXGp_Ohr-0zipJ9NoIyBvduwvkeT2HSwSlyGFpUsWQmxVEtT4OaaUKhkmNS8EL2TFAGyv-UZIS1ZdHThdQybBcmZ7O8cEfGFU-tKPTPBId1thRy42TwchSm77utcHVkDbdujxd8dxeXtNVhuxCVW7_CgdIRNJjtF2y",
-  imageAlt:
-    "Clear product preview of the Midnight Bronze Spiral notebook — this month’s atelier drop.",
-  note: "New designs are unveiled here each month. Tap the name to view the product.",
-  href: "/products/midnight-bronze-spiral",
+  imageAlt: "Preview of Fine Pixel notebooks for the upcoming atelier drop.",
+  note: "Check back here for the first look — one new design each month.",
 };

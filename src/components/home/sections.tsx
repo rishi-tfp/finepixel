@@ -50,12 +50,6 @@ export function HomeHero() {
               className="object-cover"
             />
           </div>
-          <div className="absolute -bottom-6 -left-6 hidden max-w-[200px] rounded-xl border border-outline-variant/10 bg-white p-6 shadow-lg lg:block">
-            <p className="font-caption italic text-on-surface-variant">
-              &ldquo;The texture of the paper is unparalleled for sketching.&rdquo;
-            </p>
-            <p className="mt-2 font-label-md">— Julian V, Architect</p>
-          </div>
         </div>
       </div>
     </section>

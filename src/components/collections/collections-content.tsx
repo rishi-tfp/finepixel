@@ -235,32 +235,19 @@ export function CollectionsContent() {
 
   return (
     <>
-      <section className="relative flex h-[420px] w-full items-center overflow-hidden md:h-[614px]">
+      <section className="relative flex h-[280px] w-full items-center overflow-hidden sm:h-[360px] md:h-[520px] lg:h-[614px]">
         <div className="absolute inset-0 z-0">
-          <div className="relative h-full w-full transition-transform duration-1000 hover:scale-105">
-            <OptimizedImage
-              src={images.collectionsHero}
-              alt="Soft editorial photograph of premium linen-bound notebooks stacked on a rustic wooden desk."
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="absolute inset-0 bg-black/10" />
+          <OptimizedImage
+            src={images.collectionsHero}
+            alt="The Fine Pixel collections — premium notebooks on a sunlit wooden desk."
+            fill
+            priority
+            quality={95}
+            sizes="100vw"
+            className="object-cover object-center"
+          />
         </div>
-        <div className="relative z-10 mx-auto w-full max-w-container-max px-margin-mobile md:px-margin-desktop">
-          <div className="max-w-2xl">
-            <h1 className="mb-4 font-display-lg text-display-lg-mobile leading-tight text-primary md:text-display-lg">
-              The 2024 Archival Collection
-            </h1>
-            <p className="max-w-lg font-body-lg text-body-lg text-on-surface-variant">
-              Refined tools for the focused mind. Explore our latest suite of
-              notebooks, designed with FSC-certified paper and artisanal
-              binding.
-            </p>
-          </div>
-        </div>
+        <h1 className="sr-only">Collections</h1>
       </section>
 
       <section className="mx-auto max-w-container-max px-margin-mobile py-10 md:px-margin-desktop md:py-section-gap">
@@ -336,10 +323,10 @@ export function CollectionsContent() {
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   </Link>
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent p-3 pt-10 md:p-4 md:pt-12">
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/60 to-transparent p-3 pt-12 opacity-0 transition-all duration-300 group-hover:opacity-100 md:p-4 md:pt-14">
                     <Link
                       href={`/products/${product.handle}`}
-                      className="pointer-events-auto flex w-full items-center justify-center rounded-lg bg-primary px-3 py-2.5 text-center font-label-md text-[11px] tracking-wider text-on-primary uppercase transition-opacity hover:opacity-90 sm:text-xs md:py-3 md:text-sm"
+                      className="pointer-events-none flex w-full items-center justify-center rounded-lg bg-primary px-3 py-2.5 text-center font-label-md text-[11px] tracking-wider text-on-primary uppercase transition-opacity hover:opacity-90 group-hover:pointer-events-auto sm:text-xs md:py-3 md:text-sm"
                     >
                       View Notebook
                     </Link>

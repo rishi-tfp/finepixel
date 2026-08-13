@@ -60,9 +60,13 @@ export default async function ProductHandlePage({ params }: PageProps) {
   }
 
   const externalId = shopifyProductNumericId(product.shopifyId ?? product.id);
-  const judgemeReviews = externalId
-    ? await fetchJudgemeProductReviews(externalId)
-    : null;
+  const judgemeReviews =
+    (externalId ? await fetchJudgemeProductReviews(externalId) : null) ?? {
+      externalId: externalId ?? "",
+      averageRating: 0,
+      reviewCount: 0,
+      reviews: [],
+    };
 
   return (
     <>

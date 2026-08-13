@@ -3,6 +3,10 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ProductDetail } from "@/components/product/product-detail";
+import {
+  fetchJudgemeProductReviews,
+  shopifyProductNumericId,
+} from "@/lib/judgeme";
 import { getAllProducts, getProductBySlug } from "@/lib/product-source";
 import { getSiteUrl, productJsonLd } from "@/lib/seo";
 
@@ -55,6 +59,11 @@ export default async function ProductHandlePage({ params }: PageProps) {
     relatedProducts = [];
   }
 
+  const externalId = shopifyProductNumericId(product.shopifyId ?? product.id);
+  const judgemeReviews = externalId
+    ? await fetchJudgemeProductReviews(externalId)
+    : null;
+
   return (
     <>
       <SiteHeader variant="product" />
@@ -65,7 +74,11 @@ export default async function ProductHandlePage({ params }: PageProps) {
             __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
           }}
         />
-        <ProductDetail product={product} relatedProducts={relatedProducts} />
+        <ProductDetail
+          product={product}
+          relatedProducts={relatedProducts}
+          judgemeReviews={judgemeReviews}
+        />
       </main>
       <SiteFooter />
     </>

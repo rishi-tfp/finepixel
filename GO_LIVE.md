@@ -36,6 +36,27 @@ git push -u origin main
 | `NEXT_PUBLIC_SHOPIFY_ENABLED` | `true` |
 | `NEXT_PUBLIC_SITE_URL` | `https://www.thefinepixel.com` |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | `919412814189` |
+| `SHOPIFY_ADMIN_ACCESS_TOKEN` | *(optional — powers the bag's coupon dropdown)* |
+| `NEXT_PUBLIC_JUDGEME_SHOP_DOMAIN` | `s8fmnv-wd.myshopify.com` *(Judge.me’s permanent shop domain)* |
+| `NEXT_PUBLIC_JUDGEME_PUBLIC_TOKEN` | *(Judge.me → Settings → Integrations → View API tokens → Public)* |
+
+`SHOPIFY_ADMIN_ACCESS_TOKEN` lets the bag list your live coupons automatically.
+Create it in **Settings → Apps and sales channels → Develop apps → Create an app
+→ Configure Admin API scopes → tick `read_discounts` → Install → reveal the
+Admin API access token**. Without it the dropdown falls back to the codes listed
+in `src/lib/coupons.ts`.
+
+### Judge.me product reviews (headless)
+Product pages load Judge.me’s star summary + review widget via their Widgets API
+(verified purchase reviews stay managed in the Judge.me Shopify app).
+
+1. Open **Apps → Judge.me Reviews → Settings → Integrations → View API tokens**
+2. Copy the **Public API Token** into `NEXT_PUBLIC_JUDGEME_PUBLIC_TOKEN`
+3. Set `NEXT_PUBLIC_JUDGEME_SHOP_DOMAIN` to the domain Judge.me shows (often the
+   permanent `….myshopify.com` ID, e.g. `s8fmnv-wd.myshopify.com`)
+4. Add the same vars on Vercel and redeploy
+5. After orders fulfill, Judge.me emails buyers for reviews — publish them in the app
+   and they appear on product pages automatically
 
 5. Click **Deploy** and wait until it succeeds
 6. You’ll get a temporary URL like `something.vercel.app` — open it and confirm the site loads

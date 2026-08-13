@@ -310,7 +310,7 @@ export function CollectionsContent() {
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-gutter md:gap-y-16 xl:grid-cols-3">
             {paged.map((product) => (
               <div key={product.id} className="group flex flex-col">
-                <div className="relative mb-4 aspect-square overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-500 md:mb-6 md:aspect-[3/4] md:rounded-xl md:bg-surface-container-low md:hover:-translate-y-2 md:hover:shadow-xl">
+                <div className="relative mb-4 aspect-square overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm transition-all duration-500 md:mb-6 md:aspect-[3/4] md:rounded-xl md:bg-surface-container-low md:hover:-translate-y-2 md:hover:shadow-xl">
                   <Link
                     href={`/products/${product.handle}`}
                     className="absolute inset-0"

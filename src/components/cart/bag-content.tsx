@@ -3,11 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   formatCartMoney,
   useCart,
 } from "@/components/cart/cart-provider";
+import { CouponPicker } from "@/components/cart/coupon-picker";
 import { MaterialIcon } from "@/components/shared/material-icon";
 import { WELCOME_OFFER } from "@/lib/promotions";
 
@@ -43,10 +44,19 @@ export function BagContent() {
     setDiscountError(null);
   }, [items]);
 
-  const handleApplyDiscount = async () => {
+  const cartSignature = useMemo(
+    () =>
+      items
+        .map((item) => `${item.variantId ?? item.productId}:${item.quantity}`)
+        .join("|"),
+    [items],
+  );
+
+  const handleApplyDiscount = async (codeOverride?: string) => {
     setDiscountError(null);
     setCheckoutError(null);
-    const code = discountInput.trim().toUpperCase();
+    const code = (codeOverride ?? discountInput).trim().toUpperCase();
+    if (codeOverride) setDiscountInput(code);
     if (!code) {
       setDiscountError("Enter a coupon code");
       return;
@@ -365,6 +375,15 @@ export function BagContent() {
             {discountError ? (
               <p className="mt-2 font-caption text-error">{discountError}</p>
             ) : null}
+
+            <CouponPicker
+              cartSignature={cartSignature}
+              hasItems={items.length > 0}
+              appliedCode={appliedDiscount?.code ?? null}
+              currencyCode={displayCurrency}
+              busy={isApplyingDiscount}
+              onApply={(code) => void handleApplyDiscount(code)}
+            />
           </div>
 
           {checkoutError ? (

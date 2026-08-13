@@ -3,10 +3,21 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useCart } from "@/components/cart/cart-provider";
+import { EssenceOfQuality } from "@/components/home/essence-of-quality";
+import {
+  ProductCraftNotes,
+  ProductPersonalizeCta,
+  ProductTrustNotes,
+} from "@/components/product/product-creative-sections";
+import {
+  JudgemeRatingBadge,
+  JudgemeReviewsSection,
+} from "@/components/reviews/judgeme-reviews-section";
 import { OptimizedImage } from "@/components/shared/optimized-image";
 import { MaterialIcon } from "@/components/shared/material-icon";
 import { Button } from "@/components/ui/button";
 import { images } from "@/lib/images";
+import type { JudgemeProductReviews } from "@/lib/judgeme";
 import { getLocalProduct } from "@/lib/products";
 import {
   resolveVariantId,
@@ -59,11 +70,13 @@ function swatchFor(value: string) {
 type ProductDetailProps = {
   product?: CatalogProduct;
   relatedProducts?: CatalogProduct[];
+  judgemeReviews?: JudgemeProductReviews | null;
 };
 
 export function ProductDetail({
   product: initialProduct,
   relatedProducts = [],
+  judgemeReviews = null,
 }: ProductDetailProps) {
   const { addItem } = useCart();
   const product =
@@ -255,6 +268,7 @@ export function ProductDetail({
           <h1 className="mb-2 font-headline-lg text-headline-lg text-primary">
             {product.title}
           </h1>
+          <JudgemeRatingBadge summary={judgemeReviews} />
           <p className="mb-6 font-headline-md text-headline-md text-on-surface-variant">
             {selectedVariant?.price ?? product.price}
           </p>
@@ -371,6 +385,7 @@ export function ProductDetail({
             >
               {buying ? "Redirecting…" : "Buy Now"}
             </Button>
+            <ProductTrustNotes />
           </div>
 
           {(() => {
@@ -401,6 +416,16 @@ export function ProductDetail({
           })()}
         </div>
       </div>
+
+      <JudgemeReviewsSection summary={judgemeReviews} />
+
+      <ProductCraftNotes />
+
+      <div className="relative left-1/2 mt-section-gap w-screen max-w-[100vw] -translate-x-1/2">
+        <EssenceOfQuality />
+      </div>
+
+      <ProductPersonalizeCta productTitle={product.title} />
 
       {relatedProducts.length > 0 ? (
         <section className="mt-section-gap">

@@ -17,6 +17,7 @@ const libreCaslon = Libre_Caslon_Text({
   variable: "--font-libre-caslon",
   subsets: ["latin"],
   weight: ["400", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 

@@ -12,8 +12,8 @@ import {
   CorporateGifting,
   AboutSection,
   InstagramSection,
-  NewsletterSection,
 } from "@/components/home/sections";
+import { DeliveredMilestone } from "@/components/home/delivered-milestone";
 
 export default function HomePage() {
   return (
@@ -21,6 +21,7 @@ export default function HomePage() {
       <SiteHeader variant="home" />
       <main className="min-w-0 max-w-full space-y-20 overflow-x-clip pb-8 pt-[72px] md:space-y-0 md:pb-0 md:pt-20">
         <HomeHero />
+        <DeliveredMilestone />
         <AtelierDropSection />
         <BestSellers />
         <EssenceOfQuality />
@@ -30,7 +31,6 @@ export default function HomePage() {
         <CorporateGifting />
         <AboutSection />
         <InstagramSection />
-        <NewsletterSection />
       </main>
       <SiteFooter />
       <RevealObserver />

@@ -126,7 +126,7 @@ export function ReviewsSection() {
         {formOpen ? (
           <form
             onSubmit={onSubmit}
-            className="mx-margin-mobile mb-12 space-y-5 rounded-2xl border border-outline-variant/20 bg-white p-6 shadow-sm md:mx-0 md:mb-16 md:p-8"
+            className="mx-margin-mobile mb-12 space-y-5 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-6 shadow-sm md:mx-0 md:mb-16 md:p-8"
             aria-labelledby={`${formId}-title`}
           >
             <h3
@@ -280,7 +280,7 @@ export function ReviewsSection() {
             {reviews.map((review) => (
               <article
                 key={review.id}
-                className="w-72 shrink-0 rounded-2xl border border-outline-variant/10 bg-white p-6 shadow-sm sm:p-8 md:w-auto md:p-10"
+                className="w-72 shrink-0 rounded-2xl border border-outline-variant/10 bg-surface-container-lowest p-6 shadow-sm sm:p-8 md:w-auto md:p-10"
               >
                 <div className="mb-6 flex text-secondary">
                   {Array.from({ length: 5 }).map((_, i) => (

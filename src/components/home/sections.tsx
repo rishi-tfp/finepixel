@@ -56,73 +56,9 @@ export function HomeHero() {
   );
 }
 
+export { EssenceOfQuality } from "@/components/home/essence-of-quality";
+
 /* Curated Series temporarily hidden — homepage uses Atelier Drop instead. */
-
-const qualities = [
-  {
-    icon: "description",
-    title: "Premium Writing Paper",
-    desc: "Acid-free, bleed-resistant cream paper for a smooth writing experience.",
-  },
-  {
-    icon: "auto_awesome",
-    title: "Gloss/Matte Finishes",
-    desc: "Choose the haptic response that fits your unique aesthetic style.",
-  },
-  {
-    icon: "link",
-    title: "Metallic Binding",
-    desc: "Durable twin-wire binding allows your book to lay perfectly flat.",
-  },
-  {
-    icon: "space_dashboard",
-    title: "Minimal Aesthetic",
-    desc: "Clean layouts that eliminate distractions and foster deep focus.",
-  },
-  {
-    icon: "edit_note",
-    title: "Personalisation",
-    desc: "Custom foil stamping and bespoke layouts tailored to you.",
-  },
-  {
-    icon: "search_check",
-    title: "Attention to Detail",
-    desc: "Hand-inspected for perfection at every stage of the journey.",
-  },
-] as const;
-
-export function EssenceOfQuality() {
-  return (
-    <section className="bg-surface-container-lowest py-16 md:py-section-gap">
-      <div className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
-        <div className="mx-auto mb-16 max-w-2xl text-center md:mb-20">
-          <h2 className="mb-6 font-headline-lg text-headline-lg">
-            The Essence of Quality
-          </h2>
-          <p className="mx-auto max-w-xs font-body-md text-on-surface-variant md:max-w-none">
-            Every element of our stationery is chosen with uncompromising
-            standards to ensure your thoughts are preserved with the dignity
-            they deserve.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 md:gap-x-12 md:gap-y-16">
-          {qualities.map((q) => (
-            <div key={q.title} className="flex flex-col items-center text-center">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-outline-variant/10 bg-background md:mb-6 md:h-16 md:w-16 md:shadow-sm">
-                <MaterialIcon
-                  name={q.icon}
-                  className="text-xl text-primary md:text-3xl"
-                />
-              </div>
-              <h4 className="mb-2 font-label-md text-label-md">{q.title}</h4>
-              <p className="font-caption text-on-surface-variant">{q.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 const lifestyle = [
   { src: images.lifestyle1, alt: "Aesthetic desk setup with notebook and coffee." },
@@ -316,36 +252,6 @@ export function InstagramSection() {
             </div>
           </a>
         ))}
-      </div>
-    </section>
-  );
-}
-
-export function NewsletterSection() {
-  const communityHref =
-    getWhatsAppOrderUrl(
-      "Hi! I'd like to join The Fine Pixel creative community and hear about new releases.",
-    ) ??
-    "mailto:support@thefinepixel.com?subject=Join%20the%20creative%20community";
-
-  return (
-    <section className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop md:py-section-gap">
-      <div className="rounded-3xl bg-primary p-6 text-center text-on-primary sm:p-10 md:p-20">
-        <h2 className="mb-6 font-headline-lg text-headline-lg">
-          Join Our Creative Community
-        </h2>
-        <p className="mx-auto mb-8 max-w-xl font-body-md text-on-primary-container md:mb-12">
-          Message us for early looks at atelier releases, creative prompts, and
-          design stories — we reply personally.
-        </p>
-        <a
-          href={communityHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="premium-lift inline-flex h-auto items-center justify-center rounded-lg bg-white px-8 py-4 font-label-md text-primary transition-colors hover:bg-secondary-fixed hover:text-primary"
-        >
-          Chat with us on WhatsApp
-        </a>
       </div>
     </section>
   );

@@ -5,6 +5,15 @@ import Link from "next/link";
 import { OptimizedImage } from "@/components/shared/optimized-image";
 import { localProducts } from "@/lib/products";
 import type { CatalogProduct } from "@/lib/shopify/mappers";
+import { cn } from "@/lib/utils";
+
+function productHoverImage(product: CatalogProduct) {
+  const primary = product.image || product.images[0] || "";
+  return (
+    product.images.find((src) => src && src !== primary) ||
+    undefined
+  );
+}
 
 const BESTSELLER_TAG = /best[-_\s]?sellers?/i;
 
@@ -71,39 +80,58 @@ export function BestSellers() {
           </p>
         ) : (
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-gutter">
-            {products.map((product) => (
-              <Link
-                key={product.id}
-                href={`/products/${product.handle}`}
-                className="group flex flex-col"
-              >
-                <div className="relative mb-4 aspect-square overflow-hidden rounded-2xl bg-white shadow-sm">
-                  {product.image ? (
-                    <OptimizedImage
-                      src={product.image}
-                      alt={product.title}
-                      fill
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
+            {products.map((product) => {
+              const primaryImage = product.image || product.images[0];
+              const hoverImage = productHoverImage(product);
+
+              return (
+                <Link
+                  key={product.id}
+                  href={`/products/${product.handle}`}
+                  className="group flex flex-col"
+                >
+                  <div className="relative mb-4 aspect-square overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm">
+                    {primaryImage ? (
+                      <OptimizedImage
+                        src={primaryImage}
+                        alt={product.title}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        className={cn(
+                          "object-cover transition-[opacity,transform] duration-500",
+                          hoverImage
+                            ? "group-hover:opacity-0"
+                            : "group-hover:scale-105",
+                        )}
+                      />
+                    ) : null}
+                    {hoverImage ? (
+                      <OptimizedImage
+                        src={hoverImage}
+                        alt=""
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        className="object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                      />
+                    ) : null}
+                    <span className="absolute bottom-3 left-1/2 z-10 hidden -translate-x-1/2 rounded-full bg-primary px-5 py-2 font-label-md text-on-primary opacity-0 transition-all group-hover:opacity-100 md:inline-flex">
+                      View product
+                    </span>
+                  </div>
+                  <h4 className="mb-1 font-body-md font-bold text-primary">
+                    {product.title}
+                  </h4>
+                  {detailLine(product) ? (
+                    <p className="mb-1 font-caption text-on-surface-variant">
+                      {detailLine(product)}
+                    </p>
                   ) : null}
-                  <span className="absolute bottom-3 left-1/2 hidden -translate-x-1/2 rounded-full bg-primary px-5 py-2 font-label-md text-on-primary opacity-0 transition-all group-hover:opacity-100 md:inline-flex">
-                    View product
-                  </span>
-                </div>
-                <h4 className="mb-1 font-body-md font-bold text-primary">
-                  {product.title}
-                </h4>
-                {detailLine(product) ? (
-                  <p className="mb-1 font-caption text-on-surface-variant">
-                    {detailLine(product)}
+                  <p className="font-body-md font-bold text-primary">
+                    {product.price}
                   </p>
-                ) : null}
-                <p className="font-body-md font-bold text-primary">
-                  {product.price}
-                </p>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>

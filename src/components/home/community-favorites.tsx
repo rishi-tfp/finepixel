@@ -5,6 +5,7 @@ import Link from "next/link";
 import { OptimizedImage } from "@/components/shared/optimized-image";
 import { localProducts } from "@/lib/products";
 import type { CatalogProduct } from "@/lib/shopify/mappers";
+import { productCardSubtitle } from "@/lib/shopify/mappers";
 import { cn } from "@/lib/utils";
 
 function productHoverImage(product: CatalogProduct) {
@@ -21,16 +22,6 @@ export function isBestsellerProduct(product: CatalogProduct) {
   if (product.tags.some((tag) => BESTSELLER_TAG.test(tag))) return true;
   if (product.badge && BESTSELLER_TAG.test(product.badge)) return true;
   return false;
-}
-
-function detailLine(product: CatalogProduct) {
-  const line = product.detail ?? product.category;
-  if (!line || /^(notebooks?|journals?)$/i.test(line)) return undefined;
-  // Never surface raw Shopify tags (e.g. "cute", "adulting") as the subtitle.
-  if (product.tags.some((t) => t.toLowerCase() === line.toLowerCase())) {
-    return undefined;
-  }
-  return line;
 }
 
 export function BestSellers() {
@@ -121,9 +112,9 @@ export function BestSellers() {
                   <h4 className="mb-1 font-body-md font-bold text-primary">
                     {product.title}
                   </h4>
-                  {detailLine(product) ? (
+                  {productCardSubtitle(product) ? (
                     <p className="mb-1 font-caption text-on-surface-variant">
-                      {detailLine(product)}
+                      {productCardSubtitle(product)}
                     </p>
                   ) : null}
                   <p className="font-body-md font-bold text-primary">

@@ -104,7 +104,7 @@ export function PromotionExperience() {
         className="fixed inset-x-0 top-0 z-55 w-full max-w-full overflow-x-clip bg-primary text-on-primary"
       >
         <div className="relative h-9 w-full overflow-hidden">
-          <div className="promotion-marquee absolute inset-y-0 left-0 flex w-max items-center whitespace-nowrap font-label-md text-[11px] uppercase tracking-[0.16em] sm:text-xs">
+          <div className="promotion-marquee absolute inset-y-0 left-0 flex w-max items-center whitespace-nowrap font-label-md text-[13px] font-semibold uppercase tracking-[0.14em] sm:text-sm">
             <PromotionGroup />
             <PromotionGroup hidden />
           </div>

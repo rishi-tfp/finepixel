@@ -14,7 +14,7 @@ export function HomeHero() {
     <section className="relative mx-auto max-w-container-max overflow-hidden md:flex md:min-h-[921px] md:items-center md:px-margin-desktop md:py-section-gap">
       <div className="flex w-full flex-col md:grid md:grid-cols-12 md:items-center md:gap-gutter">
         <div className="z-10 space-y-6 px-margin-mobile pt-8 pb-10 md:col-span-6 md:space-y-0 md:px-0 md:pt-0 md:pb-0">
-          <span className="mb-0 block font-label-md text-label-md tracking-[0.2em] text-secondary uppercase md:mb-4">
+          <span className="mb-0 block font-label-md text-[13px] font-semibold tracking-[0.18em] text-secondary uppercase md:mb-4 md:text-sm">
             New Atelier Release
           </span>
           <h1 className="font-display-lg text-display-lg-mobile leading-tight md:mb-6 md:text-display-lg">

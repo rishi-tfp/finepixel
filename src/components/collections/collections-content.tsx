@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { images } from "@/lib/images";
 import { localProducts } from "@/lib/products";
 import type { CatalogProduct, EditionKey } from "@/lib/shopify/mappers";
+import { productCardSubtitle } from "@/lib/shopify/mappers";
 import { cn } from "@/lib/utils";
 import { getWhatsAppOrderUrl } from "@/lib/whatsapp";
 
@@ -326,7 +327,7 @@ export function CollectionsContent() {
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/60 to-transparent p-3 pt-12 opacity-0 transition-all duration-300 group-hover:opacity-100 md:p-4 md:pt-14">
                     <Link
                       href={`/products/${product.handle}`}
-                      className="pointer-events-none flex w-full items-center justify-center rounded-lg bg-primary px-3 py-2.5 text-center font-label-md text-[11px] tracking-wider text-on-primary uppercase transition-opacity hover:opacity-90 group-hover:pointer-events-auto sm:text-xs md:py-3 md:text-sm"
+                      className="pointer-events-none flex w-full items-center justify-center rounded-lg bg-primary px-3 py-2.5 text-center font-label-md text-xs tracking-wider text-on-primary uppercase transition-opacity hover:opacity-90 group-hover:pointer-events-auto sm:text-sm md:py-3 md:text-sm"
                     >
                       View Notebook
                     </Link>
@@ -349,9 +350,14 @@ export function CollectionsContent() {
                   <h3 className="font-body-md font-bold text-primary md:pt-2 md:font-headline-md md:text-headline-md md:font-normal">
                     {product.title}
                   </h3>
-                  <p className="mt-0.5 font-caption text-on-surface-variant md:mt-1 md:font-body-md">
-                    {product.detail ?? product.category ?? "Notebook"}
-                  </p>
+                  {(() => {
+                    const subtitle = productCardSubtitle(product);
+                    return subtitle ? (
+                      <p className="mt-0.5 font-caption text-on-surface-variant md:mt-1 md:font-body-md">
+                        {subtitle}
+                      </p>
+                    ) : null;
+                  })()}
                   <p className="mt-1 font-body-md font-bold text-primary md:mt-2 md:font-headline-md md:text-headline-md md:font-normal">
                     {product.price}
                   </p>

@@ -125,7 +125,7 @@ export function CustomizerSection() {
       <div className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:items-center lg:gap-20">
           <div className="lg:col-span-5">
-            <p className="mb-4 font-label-md text-[11px] tracking-[0.28em] text-secondary uppercase">
+            <p className="mb-4 font-label-md text-[13px] tracking-[0.22em] text-secondary uppercase">
               Made With You
             </p>
             <h2 className="mb-5 max-w-[14ch] font-headline-lg text-headline-lg leading-[1.05] text-primary">
@@ -151,7 +151,7 @@ export function CustomizerSection() {
                   ) : null}
                   <span
                     className={cn(
-                      "relative z-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-caption text-[11px]",
+                      "relative z-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-caption text-[13px]",
                       index === 0
                         ? "bg-primary text-on-primary"
                         : "border border-outline-variant/80 bg-white text-on-surface-variant",
@@ -163,7 +163,7 @@ export function CustomizerSection() {
                     <h3 className="mb-1.5 font-label-md text-label-md text-primary">
                       {item.title}
                     </h3>
-                    <p className="max-w-sm font-body-md text-[15px] leading-relaxed text-on-surface-variant">
+                    <p className="max-w-sm font-body-md text-body-md leading-relaxed text-on-surface-variant">
                       {item.desc}
                     </p>
                   </div>
@@ -190,14 +190,14 @@ export function CustomizerSection() {
           <div className="lg:col-span-7">
             <div className="mb-5 flex items-baseline justify-between gap-4">
               <div>
-                <p className="mb-1 font-caption text-[10px] tracking-[0.24em] text-on-surface-variant uppercase">
+                <p className="mb-1 font-caption text-[12px] tracking-[0.2em] text-on-surface-variant uppercase">
                   Interactive glimpse
                 </p>
                 <h3 className="font-headline-md text-headline-md text-primary">
                   Feel a finish.
                 </h3>
               </div>
-              <p className="hidden font-caption text-[12px] text-on-surface-variant sm:block">
+              <p className="hidden font-caption text-[14px] text-on-surface-variant sm:block">
                 Inspiration only
               </p>
             </div>
@@ -342,7 +342,7 @@ export function CustomizerSection() {
                       type="button"
                       onClick={() => applyLook(item.id)}
                       className={cn(
-                        "shrink-0 rounded-full px-3.5 py-1.5 font-label-md text-[12px] transition-all duration-300",
+                        "shrink-0 rounded-full px-3.5 py-1.5 font-label-md text-[13px] transition-all duration-300",
                         lookId === item.id
                           ? "bg-primary text-on-primary"
                           : "bg-transparent text-on-surface-variant hover:bg-black/[0.04] hover:text-primary",
@@ -361,13 +361,13 @@ export function CustomizerSection() {
                       maxLength={22}
                       onChange={(e) => setDisplayName(e.target.value)}
                       placeholder="Try a name — just for the feel"
-                      className="w-full border-0 border-b border-black/10 bg-transparent px-0 py-2 font-label-md text-[13px] text-primary outline-none transition-colors placeholder:text-on-surface-variant/50 focus:border-secondary/50"
+                      className="w-full border-0 border-b border-black/10 bg-transparent px-0 py-2 font-label-md text-[15px] text-primary outline-none transition-colors placeholder:text-on-surface-variant/50 focus:border-secondary/50"
                     />
                   </label>
 
                   <div className="flex items-center gap-5">
                     <div className="flex items-center gap-2">
-                      <span className="font-caption text-[10px] tracking-[0.16em] text-on-surface-variant uppercase">
+                      <span className="font-caption text-[12px] tracking-[0.14em] text-on-surface-variant uppercase">
                         Foil
                       </span>
                       <div className="flex gap-1.5">
@@ -394,7 +394,7 @@ export function CustomizerSection() {
                     <div className="h-4 w-px bg-black/10" aria-hidden />
 
                     <div className="flex items-center gap-2">
-                      <span className="font-caption text-[10px] tracking-[0.16em] text-on-surface-variant uppercase">
+                      <span className="font-caption text-[12px] tracking-[0.14em] text-on-surface-variant uppercase">
                         Cover
                       </span>
                       <div className="flex gap-1.5">

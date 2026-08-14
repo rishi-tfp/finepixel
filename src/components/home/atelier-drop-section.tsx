@@ -55,7 +55,7 @@ export function AtelierDropSection() {
       aria-labelledby="atelier-drop-title"
     >
       <div className="mb-6 md:mb-8">
-        <p className="mb-2 font-label-md text-[11px] tracking-[0.28em] text-secondary uppercase">
+        <p className="mb-2 font-label-md text-[13px] tracking-[0.22em] text-secondary uppercase">
           This month’s highlight
         </p>
         <h2
@@ -108,7 +108,7 @@ export function AtelierDropSection() {
           <div className="relative z-[2] flex flex-col justify-center px-7 py-10 md:col-span-5 md:px-10 md:py-14 lg:px-12">
             <p
               className={cn(
-                "mb-3 font-caption text-[11px] tracking-[0.28em] text-on-surface-variant uppercase transition-all duration-700",
+                "mb-3 font-caption text-[13px] tracking-[0.22em] text-on-surface-variant uppercase transition-all duration-700",
                 visible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-3 opacity-0",
@@ -120,7 +120,7 @@ export function AtelierDropSection() {
 
             <p
               className={cn(
-                "mb-5 font-label-md text-[12px] tracking-[0.18em] text-secondary uppercase transition-all duration-700",
+                "mb-5 font-label-md text-[13px] tracking-[0.16em] text-secondary uppercase transition-all duration-700",
                 visible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-3 opacity-0",
@@ -144,7 +144,7 @@ export function AtelierDropSection() {
 
             <p
               className={cn(
-                "mb-6 max-w-sm font-body-md text-[15px] leading-relaxed text-on-surface-variant transition-all duration-700 md:text-body-md",
+                "mb-6 max-w-sm font-body-md text-body-md leading-relaxed text-on-surface-variant transition-all duration-700",
                 visible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-4 opacity-0",
@@ -157,7 +157,7 @@ export function AtelierDropSection() {
             {drop.note ? (
               <p
                 className={cn(
-                  "border-t border-black/8 pt-5 font-caption text-[12px] leading-relaxed tracking-[0.04em] text-on-surface-variant/80 transition-all duration-700",
+                  "border-t border-black/8 pt-5 font-caption text-[14px] leading-relaxed tracking-[0.02em] text-on-surface-variant/80 transition-all duration-700",
                   visible
                     ? "translate-y-0 opacity-100"
                     : "translate-y-3 opacity-0",

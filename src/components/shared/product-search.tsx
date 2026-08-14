@@ -14,6 +14,7 @@ import {
 } from "react";
 import { MaterialIcon } from "@/components/shared/material-icon";
 import type { CatalogProduct } from "@/lib/shopify/mappers";
+import { productCardSubtitle } from "@/lib/shopify/mappers";
 import { cn } from "@/lib/utils";
 
 type ProductSearchProps = {
@@ -268,7 +269,10 @@ export function ProductSearch({
                       </p>
                       <p className="truncate font-caption text-on-surface-variant">
                         {product.price}
-                        {product.category ? ` · ${product.category}` : ""}
+                        {(() => {
+                          const subtitle = productCardSubtitle(product);
+                          return subtitle ? ` · ${subtitle}` : "";
+                        })()}
                       </p>
                     </div>
                   </button>

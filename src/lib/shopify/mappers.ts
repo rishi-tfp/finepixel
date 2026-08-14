@@ -118,6 +118,31 @@ const EDITION_LABEL: Record<EditionKey, string> = {
   accessories: "Accessories",
 };
 
+/** Subtitle under product photos — never Softcover / Hardcover. */
+export function productCardSubtitle(
+  product: Pick<CatalogProduct, "detail" | "category" | "tags">,
+): string | undefined {
+  const line = product.detail ?? product.category;
+  if (!line || /^(notebooks?|journals?)$/i.test(line)) return undefined;
+  if (
+    /\b(hardcover|softcover|spiral|hard-?bound|soft-?bound)\b/i.test(line) ||
+    /^(hard|soft)\s*cover$/i.test(line.trim())
+  ) {
+    return undefined;
+  }
+  if (
+    Object.values(EDITION_LABEL).some(
+      (label) => label.toLowerCase() === line.toLowerCase(),
+    )
+  ) {
+    return undefined;
+  }
+  if (product.tags.some((t) => t.toLowerCase() === line.toLowerCase())) {
+    return undefined;
+  }
+  return line;
+}
+
 /** Only intentional merchandising badges — never raw Shopify tags like "cute". */
 export function resolveBadge(tags: string[] = []): string | undefined {
   const joined = tags.join(" ");
@@ -130,12 +155,19 @@ export function resolveBadge(tags: string[] = []): string | undefined {
   return undefined;
 }
 
-function resolveDetail(productType: string | undefined, edition: EditionKey) {
+function resolveDetail(productType: string | undefined, _edition: EditionKey) {
   const type = productType?.trim();
-  if (type && !/^(notebooks?|journals?)$/i.test(type)) {
+  if (
+    type &&
+    !/^(notebooks?|journals?)$/i.test(type) &&
+    !/^(hard|soft)\s*cover$/i.test(type) &&
+    !/\b(hardcover|softcover|spiral|hard-?bound|soft-?bound)\b/i.test(type)
+  ) {
     return type;
   }
-  return EDITION_LABEL[edition];
+  // Never invent Softcover / Hardcover for card subtitles — Bound Type is a
+  // Shopify option when it matters.
+  return undefined;
 }
 
 export function mapShopifyProduct(node: ShopifyProductNode): CatalogProduct {

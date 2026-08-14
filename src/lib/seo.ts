@@ -70,22 +70,14 @@ export function productSpecRows(
     rows.push({ label: name, value: option.values.join(" / ") });
   }
 
-  const hasBindingOption = product.options.some((option) =>
-    /bound|binding/i.test(option.name),
-  );
-
-  // Don't invent Binding when Shopify already has Bound Type / Binding options.
-  if (!hasBindingOption) {
-    if (product.edition === "hardcover") {
-      rows.push({ label: "Binding", value: "Hardcover" });
-    } else if (product.edition === "softcover") {
-      rows.push({ label: "Binding", value: "Softcover" });
-    }
-  }
+  // Never invent Binding Softcover/Hardcover — use Shopify Bound Type options only.
 
   if (
     product.detail &&
-    !/^(notebooks?|journals?|default title)$/i.test(product.detail.trim())
+    !/^(notebooks?|journals?|default title)$/i.test(product.detail.trim()) &&
+    !/\b(hardcover|softcover|spiral|hard-?bound|soft-?bound)\b/i.test(
+      product.detail,
+    )
   ) {
     const already = rows.some(
       (row) => row.value.toLowerCase() === product.detail!.toLowerCase(),

@@ -157,12 +157,6 @@ export function ProductPersonalizeCta({
           priority={false}
         />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_50%,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.35)_55%,rgba(0,0,0,0.55)_100%)]" />
-        <p
-          aria-hidden
-          className="pointer-events-none absolute -bottom-6 right-0 select-none font-display-lg text-[28vw] leading-none text-white/[0.06] md:text-[18vw]"
-        >
-          YOURS
-        </p>
         <div className="relative z-10 flex min-h-[480px] items-center px-margin-mobile py-16 md:min-h-[580px] md:px-margin-desktop md:py-20">
           <div className="mx-auto w-full max-w-container-max">
             <div className="max-w-lg border border-white/15 bg-black/25 p-8 backdrop-blur-sm md:p-10">

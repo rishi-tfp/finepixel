@@ -161,7 +161,7 @@ export function DeliveredMilestone() {
         }}
       />
       <div className="relative mx-auto flex max-w-container-max flex-col items-center gap-5 px-margin-mobile py-9 text-center md:flex-row md:justify-between md:gap-10 md:px-margin-desktop md:py-11 md:text-left">
-        <p className="font-label-md text-[11px] font-medium uppercase tracking-[0.32em] text-secondary-fixed">
+        <p className="font-label-md text-[13px] font-medium uppercase tracking-[0.24em] text-secondary-fixed">
           A quiet privilege
         </p>
 
@@ -170,7 +170,7 @@ export function DeliveredMilestone() {
             <span className="sr-only">Over {formatCount(value)}</span>
             <span
               aria-hidden
-              className="mr-3 align-[0.28em] font-label-md text-[11px] font-medium uppercase tracking-[0.28em] text-secondary-fixed"
+              className="mr-3 align-[0.28em] font-label-md text-[13px] font-medium uppercase tracking-[0.22em] text-secondary-fixed"
             >
               Over
             </span>
@@ -181,12 +181,12 @@ export function DeliveredMilestone() {
               {formatCount(value)}
             </span>
           </p>
-          <p className="mt-3 font-label-md text-[13px] uppercase tracking-[0.22em] text-white/75">
+          <p className="mt-3 font-label-md text-[14px] uppercase tracking-[0.18em] text-white/75">
             Notebooks delivered with care
           </p>
         </div>
 
-        <p className="max-w-[17rem] font-label-md text-[12px] font-medium uppercase leading-relaxed tracking-[0.22em] text-secondary-fixed md:text-right">
+        <p className="max-w-[17rem] font-label-md text-[13px] font-medium uppercase leading-relaxed tracking-[0.18em] text-secondary-fixed md:text-right">
           To writers, makers, and thoughtful desks across India.
         </p>
       </div>

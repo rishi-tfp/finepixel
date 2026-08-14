@@ -96,15 +96,16 @@ export function resolveEdition(input: {
   ) {
     return "special";
   }
-  if (/\b(hardcover|hard-cover|hard cover|hardbound)\b/.test(haystack)) {
-    return "hardcover";
-  }
+  // Prefer spiral/softcover before hardcover — catalogs often tag both.
   if (
-    /\b(softcover|soft-cover|soft cover|spiral|paperback|journal)\b/.test(
+    /\b(spiral|softcover|soft-cover|soft cover|paperback|journal)\b/.test(
       haystack,
     )
   ) {
     return "softcover";
+  }
+  if (/\b(hardcover|hard-cover|hard cover|hardbound)\b/.test(haystack)) {
+    return "hardcover";
   }
 
   return "softcover";

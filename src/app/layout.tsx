@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Inter, Libre_Caslon_Text, Geist_Mono } from "next/font/google";
+import { DM_Sans, Libre_Caslon_Text, Geist_Mono } from "next/font/google";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { PromotionExperience } from "@/components/promotions/promotion-experience";
 import { getSiteUrl } from "@/lib/seo";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -78,7 +78,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-IN"
-      className={`${inter.variable} ${libreCaslon.variable} ${geistMono.variable} h-full max-w-full scroll-smooth overflow-x-clip antialiased`}
+      className={`${dmSans.variable} ${libreCaslon.variable} ${geistMono.variable} h-full max-w-full scroll-smooth overflow-x-clip antialiased`}
     >
       <head>
         <link

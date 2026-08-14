@@ -30,7 +30,7 @@ const LOOKS = [
     label: "Ivory Silver",
     cover: "#E9E2D8",
     foil: "#8A8580",
-    font: "var(--font-inter), ui-sans-serif, system-ui, sans-serif",
+    font: "var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif",
     italic: false,
     line: "YOUR NAME HERE",
     sub: "PERSONAL EDITION",
@@ -320,7 +320,7 @@ export function CustomizerSection() {
                           style={{
                             color: foilHex,
                             fontFamily:
-                              "var(--font-inter), ui-sans-serif, system-ui, sans-serif",
+                              "var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif",
                             fontSize: "clamp(7px, 0.95vw, 10px)",
                             opacity: 0.78,
                           }}

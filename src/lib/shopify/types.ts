@@ -29,6 +29,7 @@ export type ShopifyProductNode = {
   priceRange: { minVariantPrice: { amount: string; currencyCode?: string } };
   compareAtPriceRange?: {
     minVariantPrice: { amount: string; currencyCode?: string };
+    maxVariantPrice?: { amount: string; currencyCode?: string };
   };
   variants?: { edges: { node: ShopifyVariant }[] };
   publishedAt?: string | null;

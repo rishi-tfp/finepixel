@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import {
   applyCouponCopy,
   FALLBACK_COUPONS,
-  MAX_EVALUATED_COUPONS,
   type Coupon,
 } from "@/lib/coupons";
 import { getShopifyCart, updateCartDiscountCodes } from "@/lib/shopify/cart";
@@ -50,7 +49,7 @@ export async function GET() {
   }
 
   try {
-    const catalog = (await loadCatalog()).slice(0, MAX_EVALUATED_COUPONS);
+    const catalog = await loadCatalog();
     if (catalog.length === 0) {
       return NextResponse.json({ coupons: [], bestCode: null });
     }

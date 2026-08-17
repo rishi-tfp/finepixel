@@ -11,16 +11,16 @@ export { CustomizerSection } from "@/components/home/customizer-section";
 
 export function HomeHero() {
   return (
-    <section className="relative mx-auto max-w-container-max overflow-hidden md:flex md:min-h-[921px] md:items-center md:px-margin-desktop md:py-section-gap">
-      <div className="flex w-full flex-col md:grid md:grid-cols-12 md:items-center md:gap-gutter">
-        <div className="z-10 space-y-6 px-margin-mobile pt-8 pb-10 md:col-span-6 md:space-y-0 md:px-0 md:pt-0 md:pb-0">
+    <section className="relative mx-auto max-w-container-max overflow-hidden md:flex md:items-start md:px-margin-desktop md:pt-8 md:pb-14">
+      <div className="flex w-full flex-col md:grid md:grid-cols-12 md:items-start md:gap-gutter">
+        <div className="z-10 space-y-5 px-margin-mobile pt-6 pb-8 md:col-span-6 md:space-y-0 md:px-0 md:pt-4 md:pb-0">
           <span className="mb-0 block font-label-md text-[13px] font-semibold tracking-[0.18em] text-secondary uppercase md:mb-4 md:text-sm">
             New Atelier Release
           </span>
           <h1 className="font-display-lg text-display-lg-mobile leading-tight md:mb-6 md:text-display-lg">
             Designed to Capture Brilliant Ideas.
           </h1>
-          <p className="max-w-lg font-body-lg text-body-lg text-on-surface-variant md:mb-10">
+          <p className="max-w-lg font-body-lg text-body-lg text-on-surface-variant md:mb-8">
             Premium notebooks crafted for students, professionals and creators
             who appreciate thoughtful design and tactile excellence.
           </p>
@@ -72,7 +72,7 @@ const lifestyle = [
 export function LifestyleGallery() {
   return (
     <section className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop md:py-section-gap">
-      <h2 className="mb-8 text-center font-headline-lg text-headline-lg md:mb-16">
+      <h2 className="mb-6 text-center font-headline-lg text-headline-lg md:mb-10">
         Inspired Spaces
       </h2>
       <div className="masonry-mobile md:hidden">

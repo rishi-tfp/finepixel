@@ -120,7 +120,7 @@ export function CustomizerSection() {
   return (
     <section
       id="customizer"
-      className="relative overflow-hidden bg-surface-container py-16 md:py-section-gap"
+      className="relative overflow-hidden bg-surface-container py-12 md:py-section-gap"
     >
       <div className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:items-center lg:gap-20">

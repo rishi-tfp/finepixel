@@ -100,7 +100,7 @@ export function EssenceOfQuality({ className }: EssenceOfQualityProps) {
     <section
       ref={sectionRef}
       className={cn(
-        "relative overflow-hidden bg-inverse-surface py-16 text-inverse-on-surface md:py-section-gap",
+        "relative overflow-hidden bg-inverse-surface py-12 text-inverse-on-surface md:py-section-gap",
         className,
       )}
     >
@@ -124,7 +124,7 @@ export function EssenceOfQuality({ className }: EssenceOfQualityProps) {
       </p>
 
       <div className="relative mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
-        <div className="mb-12 grid items-end gap-8 md:mb-16 md:grid-cols-12">
+        <div className="mb-10 grid items-end gap-8 md:mb-12 md:grid-cols-12">
           <div className="md:col-span-7">
             <p className="mb-3 font-label-md text-label-md uppercase tracking-[0.22em] text-secondary-fixed">
               Atelier standard

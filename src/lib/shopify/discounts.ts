@@ -13,7 +13,7 @@ const DISCOUNT_FIELDS = `
   title
   summary
   status
-  codes(first: 1) {
+  codes(first: 250) {
     nodes {
       code
     }
@@ -21,8 +21,8 @@ const DISCOUNT_FIELDS = `
 `;
 
 const ACTIVE_DISCOUNT_CODES_QUERY = `
-  query ActiveDiscountCodes($first: Int!, $query: String) {
-    discountNodes(first: $first, query: $query) {
+  query ActiveDiscountCodes($first: Int!, $after: String, $query: String) {
+    discountNodes(first: $first, after: $after, query: $query) {
       edges {
         node {
           id
@@ -30,8 +30,13 @@ const ACTIVE_DISCOUNT_CODES_QUERY = `
             ... on DiscountCodeBasic { ${DISCOUNT_FIELDS} }
             ... on DiscountCodeBxgy { ${DISCOUNT_FIELDS} }
             ... on DiscountCodeFreeShipping { ${DISCOUNT_FIELDS} }
+            ... on DiscountCodeApp { ${DISCOUNT_FIELDS} }
           }
         }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
@@ -49,6 +54,10 @@ type DiscountNodesResponse = {
         };
       };
     }>;
+    pageInfo?: {
+      hasNextPage?: boolean;
+      endCursor?: string | null;
+    };
   };
 };
 
@@ -63,7 +72,6 @@ let cache: { at: number; discounts: ActiveDiscount[] } | null = null;
  * a shopper to pick from a dropdown.
  */
 export async function fetchActiveDiscountCodes(
-  limit = 25,
 ): Promise<ActiveDiscount[]> {
   if (!isShopifyAdminConfigured()) return [];
 
@@ -71,27 +79,43 @@ export async function fetchActiveDiscountCodes(
     return cache.discounts;
   }
 
-  const data = await shopifyAdminFetch<DiscountNodesResponse>(
-    ACTIVE_DISCOUNT_CODES_QUERY,
-    { first: limit, query: "status:active" },
-  );
-
   const seen = new Set<string>();
   const discounts: ActiveDiscount[] = [];
+  let after: string | null = null;
+  let hasNextPage = true;
 
-  for (const edge of data.discountNodes?.edges ?? []) {
-    const discount = edge.node?.discount;
-    if (!discount || discount.status !== "ACTIVE") continue;
+  // Shopify returns at most 250 discount nodes per page. Follow the cursor so
+  // every active code-based discount from Admin is surfaced on the storefront.
+  while (hasNextPage) {
+    const data: DiscountNodesResponse =
+      await shopifyAdminFetch<DiscountNodesResponse>(
+      ACTIVE_DISCOUNT_CODES_QUERY,
+      { first: 250, after, query: "status:active" },
+      );
 
-    const code = discount.codes?.nodes?.[0]?.code?.trim().toUpperCase();
-    if (!code || seen.has(code)) continue;
-    seen.add(code);
+    for (const edge of data.discountNodes?.edges ?? []) {
+      const discount = edge.node?.discount;
+      if (!discount || discount.status !== "ACTIVE") continue;
 
-    discounts.push({
-      code,
-      title: discount.title?.trim() || code,
-      summary: discount.summary?.trim() || "",
-    });
+      for (const entry of discount.codes?.nodes ?? []) {
+        const code = entry.code?.trim().toUpperCase();
+        if (!code || seen.has(code)) continue;
+        seen.add(code);
+
+        discounts.push({
+          code,
+          title: discount.title?.trim() || code,
+          summary: discount.summary?.trim() || "",
+        });
+      }
+    }
+
+    const pageInfo: NonNullable<
+      DiscountNodesResponse["discountNodes"]
+    >["pageInfo"] =
+      data.discountNodes?.pageInfo;
+    hasNextPage = pageInfo?.hasNextPage === true && Boolean(pageInfo.endCursor);
+    after = pageInfo?.endCursor ?? null;
   }
 
   cache = { at: Date.now(), discounts };

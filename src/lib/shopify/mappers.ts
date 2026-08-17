@@ -19,6 +19,9 @@ export type CatalogProduct = {
   price: string;
   priceAmount: number;
   currencyCode: string;
+  /** Formatted MRP when higher than selling price. */
+  compareAtPrice?: string;
+  compareAtPriceAmount?: number;
   image: string;
   images: string[];
   detail?: string;
@@ -35,6 +38,9 @@ export type CatalogProduct = {
     title: string;
     available: boolean;
     price: string;
+    priceAmount: number;
+    compareAtPrice?: string;
+    compareAtPriceAmount?: number;
     options: { name: string; value: string }[];
   }[];
   source: "local" | "shopify";
@@ -51,6 +57,26 @@ function formatMoney(amount: string | number, currencyCode = "INR") {
   } catch {
     return `₹${Number.isFinite(value) ? value.toFixed(2) : "0.00"}`;
   }
+}
+
+/** Only surface compare-at when it is strictly higher than the selling price. */
+export function mapCompareAt(
+  raw: { amount: string; currencyCode?: string } | null | undefined,
+  sellingAmount: number,
+  currency: string,
+): { compareAtPrice?: string; compareAtPriceAmount?: number } {
+  if (!raw?.amount) return {};
+  const compareAmount = Number(raw.amount);
+  if (!Number.isFinite(compareAmount) || compareAmount <= sellingAmount) {
+    return {};
+  }
+  return {
+    compareAtPrice: formatMoney(
+      compareAmount,
+      raw.currencyCode ?? currency,
+    ),
+    compareAtPriceAmount: compareAmount,
+  };
 }
 
 /** Shopify always includes a default Title option — hide it when there are no real choices. */
@@ -172,29 +198,44 @@ function resolveDetail(productType: string | undefined, _edition: EditionKey) {
 
 export function mapShopifyProduct(node: ShopifyProductNode): CatalogProduct {
   const tags = node.tags ?? [];
+  const rangeCurrency =
+    node.priceRange.minVariantPrice.currencyCode ?? "INR";
+
   const variants =
-    node.variants?.edges?.map((edge) => edge.node).map((variant) => ({
-      id: variant.id,
-      title: variant.title,
-      available: variant.availableForSale !== false,
-      price: formatMoney(
+    node.variants?.edges?.map((edge) => edge.node).map((variant) => {
+      const currency =
+        variant.price?.currencyCode ?? rangeCurrency;
+      const priceAmount = Number(
         variant.price?.amount ?? node.priceRange.minVariantPrice.amount,
-        variant.price?.currencyCode ??
-          node.priceRange.minVariantPrice.currencyCode ??
-          "INR",
-      ),
-      options: variant.selectedOptions ?? [],
-    })) ?? [];
+      );
+      // Only this variant's Compare-at — never a product-wide range max.
+      const compareAt = mapCompareAt(
+        variant.compareAtPrice,
+        priceAmount,
+        currency,
+      );
+      return {
+        id: variant.id,
+        title: variant.title,
+        available: variant.availableForSale !== false,
+        price: formatMoney(priceAmount, currency),
+        priceAmount,
+        ...compareAt,
+        options: variant.selectedOptions ?? [],
+      };
+    }) ?? [];
 
   const images =
     node.images?.edges?.map((edge) => edge.node.url) ??
     (node.featuredImage?.url ? [node.featuredImage.url] : []);
 
-  const currency = node.priceRange.minVariantPrice.currencyCode ?? "INR";
-  const amount = Number(node.priceRange.minVariantPrice.amount);
-
   const defaultVariant =
     variants.find((variant) => variant.available) ?? variants[0];
+
+  const amount =
+    defaultVariant?.priceAmount ??
+    Number(node.priceRange.minVariantPrice.amount);
+  const currency = rangeCurrency;
 
   const edition = resolveEdition({
     tags,
@@ -211,6 +252,13 @@ export function mapShopifyProduct(node: ShopifyProductNode): CatalogProduct {
     price: formatMoney(amount, currency),
     priceAmount: amount,
     currencyCode: currency,
+    // Product-level MRP mirrors the default variant only (no range fallback).
+    ...(defaultVariant?.compareAtPriceAmount != null
+      ? {
+          compareAtPrice: defaultVariant.compareAtPrice,
+          compareAtPriceAmount: defaultVariant.compareAtPriceAmount,
+        }
+      : {}),
     image: images[0] ?? "",
     images,
     detail,

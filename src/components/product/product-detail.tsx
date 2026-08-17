@@ -5,6 +5,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useCart } from "@/components/cart/cart-provider";
 import { EssenceOfQuality } from "@/components/home/essence-of-quality";
 import {
+  BUNDLE_OFFERS,
+  BundleOffers,
+  type BundleOffer,
+} from "@/components/product/bundle-offers";
+import {
   ProductCraftNotes,
   ProductPersonalizeCta,
   ProductTrustNotes,
@@ -19,6 +24,11 @@ import { Button } from "@/components/ui/button";
 import { images } from "@/lib/images";
 import type { JudgemeProductReviews } from "@/lib/judgeme";
 import { getLocalProduct } from "@/lib/products";
+import {
+  applySizeToSelections,
+  parseSizeKey,
+  type SizeKey,
+} from "@/lib/product-size";
 import {
   resolveVariantId,
   type CatalogProduct,
@@ -67,16 +77,156 @@ function swatchFor(value: string) {
   return FOIL_SWATCHES[value.toLowerCase()] ?? null;
 }
 
+type PriceSnapshot = {
+  sellingPrice: string;
+  sellingAmount: number;
+  mrp?: string;
+  mrpAmount?: number;
+  showMrp: boolean;
+  discountPercent: number;
+  savings: string | null;
+  currencyCode: string;
+};
+
+function resolvePriceSnapshot(
+  product: CatalogProduct,
+  selectedVariant: CatalogProduct["variants"][number] | undefined,
+): PriceSnapshot {
+  const sellingPrice = selectedVariant?.price ?? product.price;
+  const sellingAmount = selectedVariant?.priceAmount ?? product.priceAmount;
+  const mrp = selectedVariant?.compareAtPrice;
+  const mrpAmount = selectedVariant?.compareAtPriceAmount;
+  const showMrp =
+    mrp != null && mrpAmount != null && mrpAmount > sellingAmount;
+  const discountPercent = showMrp
+    ? Math.round(((mrpAmount - sellingAmount) / mrpAmount) * 100)
+    : 0;
+  const currencyCode = product.currencyCode || "INR";
+  const savings = showMrp
+    ? new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: currencyCode,
+        maximumFractionDigits: 0,
+      }).format(mrpAmount - sellingAmount)
+    : null;
+
+  return {
+    sellingPrice,
+    sellingAmount,
+    mrp,
+    mrpAmount,
+    showMrp,
+    discountPercent,
+    savings,
+    currencyCode,
+  };
+}
+
+function purchasableVariantId(product: CatalogProduct) {
+  const defaultVariant = product.variants.find(
+    (variant) => variant.id === product.defaultVariantId && variant.available,
+  );
+  return defaultVariant?.id ?? product.variants.find((variant) => variant.available)?.id;
+}
+
+function ProductPricePanel({
+  price,
+  compact = false,
+}: {
+  price: PriceSnapshot;
+  compact?: boolean;
+}) {
+  if (compact) {
+    return (
+      <div className="flex flex-wrap items-end justify-between gap-3 rounded-xl border border-secondary/20 bg-secondary/[0.06] px-4 py-3">
+        <div className="min-w-0">
+          <p className="mb-1 font-label-md text-[12px] font-semibold tracking-[0.14em] text-secondary uppercase">
+            Your price
+          </p>
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <p className="font-heading text-[28px] leading-none tracking-tight text-on-surface">
+              {price.sellingPrice}
+            </p>
+            {price.showMrp ? (
+              <p className="font-body-md text-[16px] text-on-surface-variant">
+                <span className="mr-1.5 font-label-md text-[13px] font-semibold">
+                  MRP
+                </span>
+                <span className="line-through decoration-2">{price.mrp}</span>
+              </p>
+            ) : null}
+          </div>
+        </div>
+        {price.showMrp ? (
+          <div className="text-right">
+            <span className="inline-flex rounded-full bg-secondary px-2.5 py-1 font-label-md text-[12px] font-bold text-white">
+              {price.discountPercent}% OFF
+            </span>
+            <p className="mt-1.5 font-body-md text-[13px] font-medium text-secondary">
+              Save {price.savings}
+            </p>
+          </div>
+        ) : (
+          <p className="font-caption text-on-surface-variant">Incl. of taxes</p>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mb-7 rounded-2xl border border-secondary/20 bg-secondary/[0.06] p-4 md:p-5">
+      <div className="mb-2 flex flex-wrap items-center gap-2">
+        <span className="font-label-md text-[13px] font-semibold tracking-[0.14em] text-secondary uppercase">
+          Special price
+        </span>
+        {price.showMrp ? (
+          <span className="rounded-full bg-secondary px-2.5 py-1 font-label-md text-[13px] font-bold text-white">
+            {price.discountPercent}% OFF
+          </span>
+        ) : null}
+      </div>
+      <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
+        <p className="font-heading text-[34px] leading-none tracking-tight text-on-surface md:text-[40px]">
+          {price.sellingPrice}
+        </p>
+        {price.showMrp ? (
+          <div className="flex items-baseline gap-2 pb-0.5">
+            <span className="font-label-md text-[15px] font-semibold text-on-surface-variant">
+              MRP
+            </span>
+            <span className="font-body-md text-[20px] font-medium text-on-surface-variant line-through decoration-2">
+              {price.mrp}
+            </span>
+          </div>
+        ) : null}
+      </div>
+      {price.showMrp ? (
+        <p className="mt-3 font-body-md text-[15px] font-medium text-secondary">
+          You save {price.savings}
+          <span className="mx-2 text-outline-variant">•</span>
+          Inclusive of all taxes
+        </p>
+      ) : (
+        <p className="mt-3 font-body-md text-[15px] text-on-surface-variant">
+          Inclusive of all taxes
+        </p>
+      )}
+    </div>
+  );
+}
+
 type ProductDetailProps = {
   product?: CatalogProduct;
   relatedProducts?: CatalogProduct[];
   judgemeReviews?: JudgemeProductReviews | null;
+  initialSize?: SizeKey | null;
 };
 
 export function ProductDetail({
   product: initialProduct,
   relatedProducts = [],
   judgemeReviews = null,
+  initialSize = null,
 }: ProductDetailProps) {
   const { addItem } = useCart();
   const product =
@@ -97,20 +247,29 @@ export function ProductDetail({
     for (const option of product.options) {
       next[option.name] = option.values[0];
     }
-    return next;
-  }, [product]);
+    return applySizeToSelections(product, next, parseSizeKey(initialSize));
+  }, [product, initialSize]);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [fading, setFading] = useState(false);
   const [added, setAdded] = useState(false);
   const [buying, setBuying] = useState(false);
+  const [bundleOfferId, setBundleOfferId] =
+    useState<BundleOffer["id"]>("single");
+  const [selectedBundleHandles, setSelectedBundleHandles] = useState<string[]>(
+    [],
+  );
   const [selections, setSelections] =
     useState<Record<string, string>>(initialSelections);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- App Router can reuse this client component for a different product, so its transient controls must reset. */
   useEffect(() => {
     setSelections(initialSelections);
     setActiveIndex(0);
+    setBundleOfferId("single");
+    setSelectedBundleHandles([]);
   }, [initialSelections, product.id]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const active = gallery[activeIndex] ?? gallery[0];
 
@@ -125,6 +284,39 @@ export function ProductDetail({
       product.variants[0],
     [product.variants, selectedVariantId],
   );
+
+  const price = useMemo(
+    () => resolvePriceSnapshot(product, selectedVariant),
+    [product, selectedVariant],
+  );
+  const selectedBundle =
+    BUNDLE_OFFERS.find((offer) => offer.id === bundleOfferId) ??
+    BUNDLE_OFFERS[0];
+  const suggestedBundleProducts = useMemo(
+    () =>
+      relatedProducts.filter(
+        (item) =>
+          item.handle !== product.handle &&
+          item.source === "shopify" &&
+          item.available &&
+          purchasableVariantId(item)?.startsWith(
+            "gid://shopify/ProductVariant/",
+          ),
+      ),
+    [product.handle, relatedProducts],
+  );
+  const selectedBundleProducts = useMemo(
+    () =>
+      selectedBundleHandles
+        .map((handle) =>
+          suggestedBundleProducts.find((item) => item.handle === handle),
+        )
+        .filter((item): item is CatalogProduct => item != null),
+    [selectedBundleHandles, suggestedBundleProducts],
+  );
+  const requiredBundleSuggestions = Math.max(0, selectedBundle.quantity - 1);
+  const bundleReady =
+    selectedBundleProducts.length === requiredBundleSuggestions;
 
   useEffect(() => {
     const buttons = document.querySelectorAll("main button");
@@ -155,6 +347,21 @@ export function ProductDetail({
     }, 200);
   };
 
+  const selectBundleOffer = (offer: BundleOffer) => {
+    setBundleOfferId(offer.id);
+    setSelectedBundleHandles([]);
+  };
+
+  const toggleBundleProduct = (selectedProduct: CatalogProduct) => {
+    setSelectedBundleHandles((current) => {
+      if (current.includes(selectedProduct.handle)) {
+        return current.filter((handle) => handle !== selectedProduct.handle);
+      }
+      if (current.length >= requiredBundleSuggestions) return current;
+      return [...current, selectedProduct.handle];
+    });
+  };
+
   const handleAddToBag = async () => {
     if (product.source !== "shopify") {
       window.alert(
@@ -162,11 +369,67 @@ export function ProductDetail({
       );
       return;
     }
-    const result = await addItem(product, 1, selectedVariantId);
-    if (!result.ok) {
-      window.alert(result.error ?? "Could not add to bag");
+    if (!bundleReady) {
+      window.alert(
+        `Choose ${requiredBundleSuggestions - selectedBundleProducts.length} more design${requiredBundleSuggestions - selectedBundleProducts.length === 1 ? "" : "s"} to complete this offer.`,
+      );
       return;
     }
+
+    const bundleItems = [
+      { product, variantId: selectedVariantId },
+      ...selectedBundleProducts.map((item) => ({
+        product: item,
+        variantId: purchasableVariantId(item),
+      })),
+    ];
+    if (
+      bundleItems.some(
+        (item) =>
+          !item.variantId?.startsWith("gid://shopify/ProductVariant/"),
+      )
+    ) {
+      window.alert(
+        "One of the selected designs is unavailable. Please choose another.",
+      );
+      return;
+    }
+
+    for (const item of bundleItems) {
+      const result = await addItem(item.product, 1, item.variantId, {
+        attributes: [
+          {
+            key: "Bundle offer",
+            value: selectedBundle.label,
+          },
+        ],
+      });
+      if (!result.ok) {
+        window.alert(result.error ?? "Could not add the bundle to your bag");
+        return;
+      }
+    }
+
+    if (selectedBundle.discountCode) {
+      const discountResponse = await fetch("/api/discounts/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          discountCode: selectedBundle.discountCode,
+        }),
+      });
+      const discount = (await discountResponse.json()) as {
+        applicable?: boolean;
+        error?: string;
+      };
+      if (!discountResponse.ok || discount.applicable !== true) {
+        window.alert(
+          discount.error ??
+            "The notebooks were added, but the bundle saving could not be applied.",
+        );
+      }
+    }
+
     setAdded(true);
     setTimeout(() => setAdded(false), 1800);
   };
@@ -178,6 +441,31 @@ export function ProductDetail({
       );
       return;
     }
+    if (!bundleReady) {
+      window.alert(
+        `Choose ${requiredBundleSuggestions - selectedBundleProducts.length} more design${requiredBundleSuggestions - selectedBundleProducts.length === 1 ? "" : "s"} to complete this offer.`,
+      );
+      return;
+    }
+
+    const checkoutItems = [
+      { product, variantId: selectedVariantId },
+      ...selectedBundleProducts.map((item) => ({
+        product: item,
+        variantId: purchasableVariantId(item),
+      })),
+    ];
+    if (
+      checkoutItems.some(
+        (item) =>
+          !item.variantId?.startsWith("gid://shopify/ProductVariant/"),
+      )
+    ) {
+      window.alert(
+        "One of the selected designs is unavailable. Please choose another.",
+      );
+      return;
+    }
 
     setBuying(true);
     try {
@@ -185,7 +473,19 @@ export function ProductDetail({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          lines: [{ merchandiseId: selectedVariantId, quantity: 1 }],
+          lines: checkoutItems.map((item) => ({
+            merchandiseId: item.variantId,
+            quantity: 1,
+            attributes: [
+              {
+                key: "Bundle offer",
+                value: selectedBundle.label,
+              },
+            ],
+          })),
+          ...(selectedBundle.discountCode
+            ? { discountCode: selectedBundle.discountCode }
+            : {}),
         }),
       });
       const data = (await response.json()) as {
@@ -269,9 +569,7 @@ export function ProductDetail({
             {product.title}
           </h1>
           <JudgemeRatingBadge summary={judgemeReviews} />
-          <p className="mb-6 font-headline-md text-headline-md text-on-surface-variant">
-            {selectedVariant?.price ?? product.price}
-          </p>
+          <ProductPricePanel price={price} />
           <p
             className={cn(
               "font-body-md text-body-md leading-relaxed text-on-surface-variant",
@@ -365,25 +663,44 @@ export function ProductDetail({
             </div>
           ) : null}
 
+          <BundleOffers
+            unitPrice={price.sellingAmount}
+            currencyCode={price.currencyCode}
+            selectedId={bundleOfferId}
+            suggestions={suggestedBundleProducts}
+            selectedHandles={selectedBundleHandles}
+            onSelect={selectBundleOffer}
+            onToggleSuggestion={toggleBundleProduct}
+          />
+
           <div className="mb-12 flex flex-col gap-4">
+            <ProductPricePanel price={price} compact />
             <Button
               onClick={handleAddToBag}
-              disabled={isUnavailable}
+              disabled={isUnavailable || !bundleReady}
               className="h-auto w-full rounded-lg bg-primary py-5 font-label-md text-label-md uppercase tracking-widest text-on-primary transition-opacity hover:bg-primary hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isUnavailable
                 ? "Out of Stock"
+                : !bundleReady
+                  ? `Choose ${requiredBundleSuggestions - selectedBundleProducts.length} More`
                 : added
-                  ? "Added to Bag"
-                  : "Add to Bag"}
+                  ? `${selectedBundle.label} Added`
+                  : selectedBundle.quantity > 1
+                    ? `Add ${selectedBundle.quantity} Designs to Bag`
+                    : "Add to Bag"}
             </Button>
             <Button
               variant="outline"
               onClick={handleBuyNow}
-              disabled={isUnavailable || buying}
+              disabled={isUnavailable || buying || !bundleReady}
               className="h-auto w-full rounded-lg border-primary bg-transparent py-5 font-label-md text-label-md uppercase tracking-widest text-primary transition-colors hover:bg-surface-container-lowest disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {buying ? "Redirecting…" : "Buy Now"}
+              {buying
+                ? "Redirecting…"
+                : selectedBundle.quantity > 1
+                  ? "Buy Bundle Now"
+                  : "Buy Now"}
             </Button>
             <ProductTrustNotes />
           </div>

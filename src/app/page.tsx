@@ -19,7 +19,7 @@ export default function HomePage() {
   return (
     <>
       <SiteHeader variant="home" />
-      <main className="min-w-0 max-w-full space-y-20 overflow-x-clip pb-8 pt-[72px] md:space-y-0 md:pb-0 md:pt-20">
+      <main className="min-w-0 max-w-full space-y-12 overflow-x-clip pb-8 pt-[72px] md:space-y-0 md:pb-0 md:pt-20">
         <HomeHero />
         <DeliveredMilestone />
         <AtelierDropSection />

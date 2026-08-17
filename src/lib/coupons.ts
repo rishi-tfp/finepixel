@@ -13,12 +13,6 @@ export type Coupon = {
   requirement: string;
 };
 
-/**
- * Each evaluated coupon costs a Shopify round trip, so the bag stays
- * responsive by scoring only the first few.
- */
-export const MAX_EVALUATED_COUPONS = 8;
-
 const DEFAULT_REQUIREMENT = "Not valid for the items in your bag right now.";
 
 /**

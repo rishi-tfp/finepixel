@@ -6,10 +6,10 @@ const LINK_COLS = [
   {
     title: "Shop",
     items: [
-      { label: "Collections", href: "/collections" },
+      { label: "COLLECTIONS", href: "/collections" },
       { label: "Corporate Orders", href: "/corporate" },
-      { label: "Customizer", href: "/#customizer" },
-      { label: "Our Story", href: "/#studio" },
+      { label: "CUSTOMIZER", href: "/#customizer" },
+      { label: "OUR STORY", href: "/#studio" },
     ],
   },
   {

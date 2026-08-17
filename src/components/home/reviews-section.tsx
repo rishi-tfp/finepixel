@@ -99,9 +99,9 @@ export function ReviewsSection() {
   };
 
   return (
-    <section className="bg-surface-container-low py-16 md:py-section-gap">
+    <section className="bg-surface-container-low py-12 md:py-section-gap">
       <div className="mx-auto max-w-container-max md:px-margin-desktop">
-        <div className="mb-10 flex flex-col items-center gap-4 px-margin-mobile text-center md:mb-16 md:px-0">
+        <div className="mb-8 flex flex-col items-center gap-4 px-margin-mobile text-center md:mb-10 md:px-0">
           <h2 className="font-headline-lg text-headline-lg">
             Reflections from the Studio
           </h2>
@@ -126,7 +126,7 @@ export function ReviewsSection() {
         {formOpen ? (
           <form
             onSubmit={onSubmit}
-            className="mx-margin-mobile mb-12 space-y-5 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-6 shadow-sm md:mx-0 md:mb-16 md:p-8"
+            className="mx-margin-mobile mb-10 space-y-5 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-6 shadow-sm md:mx-0 md:mb-12 md:p-8"
             aria-labelledby={`${formId}-title`}
           >
             <h3

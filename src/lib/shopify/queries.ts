@@ -1,5 +1,5 @@
 export const PRODUCTS_QUERY = `
-  query Products($first: Int!, $after: String) {
+  query Products($first: Int!, $after: String) @inContext(country: IN) {
     products(first: $first, after: $after) {
       pageInfo {
         hasNextPage
@@ -45,6 +45,10 @@ export const PRODUCTS_QUERY = `
               amount
               currencyCode
             }
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
           }
           variants(first: 100) {
             edges {
@@ -74,7 +78,7 @@ export const PRODUCTS_QUERY = `
 `;
 
 export const PRODUCT_BY_HANDLE_QUERY = `
-  query ProductByHandle($handle: String!) {
+  query ProductByHandle($handle: String!) @inContext(country: IN) {
     product(handle: $handle) {
       id
       handle
@@ -107,6 +111,10 @@ export const PRODUCT_BY_HANDLE_QUERY = `
       }
       compareAtPriceRange {
         minVariantPrice {
+          amount
+          currencyCode
+        }
+        maxVariantPrice {
           amount
           currencyCode
         }

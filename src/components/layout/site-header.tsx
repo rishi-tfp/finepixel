@@ -22,9 +22,9 @@ type SiteHeaderProps = {
 
 /** Same tabs on every page (homepage nav). */
 const HOME_NAV_LINKS: MobileNavLink[] = [
-  { href: "/collections", label: "Collections" },
-  { href: "/#customizer", label: "Customizer" },
-  { href: "/#studio", label: "Our Story" },
+  { href: "/collections", label: "COLLECTIONS" },
+  { href: "/#customizer", label: "CUSTOMIZER" },
+  { href: "/#studio", label: "OUR STORY" },
 ];
 
 function NavTabs({
@@ -54,7 +54,7 @@ function NavTabs({
             key={link.label}
             href={link.href}
             className={cn(
-              "font-label-md text-label-md transition-colors",
+              "font-label-md text-label-md tracking-[0.12em] transition-colors",
               active
                 ? "relative text-primary after:absolute after:-bottom-1 after:left-1/2 after:h-1 after:w-1 after:-translate-x-1/2 after:rounded-full after:bg-secondary after:content-['']"
                 : "text-on-surface-variant hover:text-primary",

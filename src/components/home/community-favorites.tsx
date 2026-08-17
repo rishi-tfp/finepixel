@@ -54,11 +54,11 @@ export function BestSellers() {
 
   return (
     <section
-      className="bg-surface-container px-margin-mobile py-16 md:bg-transparent md:px-margin-desktop md:py-section-gap"
+      className="bg-surface-container px-margin-mobile py-12 md:bg-transparent md:px-margin-desktop md:py-section-gap"
       id="best-sellers"
     >
       <div className="mx-auto max-w-container-max">
-        <h2 className="mb-10 text-center font-headline-lg text-headline-lg md:mb-16">
+        <h2 className="mb-6 text-center font-headline-lg text-headline-lg md:mb-10">
           The Community Favorites
         </h2>
         {loading ? (

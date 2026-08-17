@@ -7,11 +7,13 @@ import {
   fetchJudgemeProductReviews,
   shopifyProductNumericId,
 } from "@/lib/judgeme";
+import { parseSizeKey } from "@/lib/product-size";
 import { getAllProducts, getProductBySlug } from "@/lib/product-source";
 import { getSiteUrl, productJsonLd } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ handle: string }>;
+  searchParams: Promise<{ size?: string | string[] }>;
 };
 
 export async function generateMetadata({
@@ -43,8 +45,14 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductHandlePage({ params }: PageProps) {
+export default async function ProductHandlePage({
+  params,
+  searchParams,
+}: PageProps) {
   const { handle } = await params;
+  const query = await searchParams;
+  const sizeParam = Array.isArray(query.size) ? query.size[0] : query.size;
+  const initialSize = parseSizeKey(sizeParam);
   const product = await getProductBySlug(handle);
   if (!product) notFound();
 
@@ -82,6 +90,7 @@ export default async function ProductHandlePage({ params }: PageProps) {
           product={product}
           relatedProducts={relatedProducts}
           judgemeReviews={judgemeReviews}
+          initialSize={initialSize}
         />
       </main>
       <SiteFooter />

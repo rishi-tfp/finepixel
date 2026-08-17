@@ -10,12 +10,18 @@ import { images } from "@/lib/images";
 import { localProducts } from "@/lib/products";
 import type { CatalogProduct, EditionKey } from "@/lib/shopify/mappers";
 import { productCardSubtitle } from "@/lib/shopify/mappers";
+import {
+  displayedVariant,
+  productHref,
+  productMatchesSize,
+  SIZE_OPTIONS,
+  type SizeKey,
+} from "@/lib/product-size";
 import { cn } from "@/lib/utils";
 import { getWhatsAppOrderUrl } from "@/lib/whatsapp";
 
 type EditionTab = "all" | EditionKey;
 type SortKey = "featured" | "price-asc" | "price-desc" | "newest";
-type SizeKey = "a5" | "a6" | "pocket";
 
 const EDITION_TABS: { id: EditionTab; label: string }[] = [
   { id: "all", label: "All Editions" },
@@ -23,16 +29,6 @@ const EDITION_TABS: { id: EditionTab; label: string }[] = [
   { id: "softcover", label: "Softcover" },
   { id: "special", label: "Special Editions" },
   { id: "accessories", label: "Accessories" },
-];
-
-const SIZE_OPTIONS: { id: SizeKey; label: string; match: RegExp }[] = [
-  { id: "a5", label: "A5 (148 × 210 mm)", match: /\ba5\b/i },
-  { id: "a6", label: "A6 (105 × 148 mm)", match: /\ba6\b/i },
-  {
-    id: "pocket",
-    label: "Pocket (90 × 140 mm)",
-    match: /\bpocket\b|\b90\s*[x×]\s*140\b/i,
-  },
 ];
 
 const SORT_OPTIONS: { id: SortKey; label: string }[] = [
@@ -71,30 +67,19 @@ function productMatchesQuery(product: CatalogProduct, query: string) {
   return haystack.includes(q);
 }
 
-function productMatchesSizes(product: CatalogProduct, sizes: SizeKey[]) {
-  if (sizes.length === 0) return true;
-  const haystack = [
-    product.title,
-    product.description,
-    product.detail,
-    product.category,
-    ...(product.tags ?? []),
-  ]
-    .filter(Boolean)
-    .join(" ");
-  return sizes.some((size) => {
-    const option = SIZE_OPTIONS.find((item) => item.id === size);
-    return option ? option.match.test(haystack) : false;
-  });
-}
-
-function sortProducts(list: CatalogProduct[], sort: SortKey) {
+function sortProducts(
+  list: CatalogProduct[],
+  sort: SortKey,
+  selectedSize: SizeKey | null,
+) {
   const next = [...list];
+  const priceFor = (product: CatalogProduct) =>
+    displayedVariant(product, selectedSize)?.priceAmount ?? product.priceAmount;
   switch (sort) {
     case "price-asc":
-      return next.sort((a, b) => a.priceAmount - b.priceAmount);
+      return next.sort((a, b) => priceFor(a) - priceFor(b));
     case "price-desc":
-      return next.sort((a, b) => b.priceAmount - a.priceAmount);
+      return next.sort((a, b) => priceFor(b) - priceFor(a));
     case "newest":
       return next.sort((a, b) => {
         const aTime = a.publishedAt ? Date.parse(a.publishedAt) : 0;
@@ -133,7 +118,7 @@ export function CollectionsContent() {
   );
   const [edition, setEdition] = useState<EditionTab>(urlEdition);
   const [sort, setSort] = useState<SortKey>("featured");
-  const [sizes, setSizes] = useState<SizeKey[]>([]);
+  const [selectedSize, setSelectedSize] = useState<SizeKey | null>(null);
   const [page, setPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState(urlQuery);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -201,10 +186,10 @@ export function CollectionsContent() {
         ? searched
         : searched.filter((product) => product.edition === edition);
     const bySize = byEdition.filter((product) =>
-      productMatchesSizes(product, sizes),
+      productMatchesSize(product, selectedSize),
     );
-    return sortProducts(bySize, sort);
-  }, [searched, edition, sizes, sort]);
+    return sortProducts(bySize, sort, selectedSize);
+  }, [searched, edition, selectedSize, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const safePage = Math.min(page, totalPages - 1);
@@ -215,22 +200,20 @@ export function CollectionsContent() {
 
   useEffect(() => {
     setPage(0);
-  }, [edition, sort, sizes, catalog, searchQuery]);
+  }, [edition, sort, selectedSize, catalog, searchQuery]);
 
   const activeFilterCount =
     (edition !== "all" ? 1 : 0) +
-    sizes.length +
+    (selectedSize ? 1 : 0) +
     (sort !== "featured" ? 1 : 0);
 
-  const toggleSize = (size: SizeKey) => {
-    setSizes((prev) =>
-      prev.includes(size) ? prev.filter((item) => item !== size) : [...prev, size],
-    );
+  const selectSize = (size: SizeKey) => {
+    setSelectedSize((current) => (current === size ? null : size));
   };
 
   const clearFilters = () => {
     setEdition("all");
-    setSizes([]);
+    setSelectedSize(null);
     setSort("featured");
   };
 
@@ -263,6 +246,7 @@ export function CollectionsContent() {
               {searchQuery.trim()
                 ? ` matching \u201c${searchQuery.trim()}\u201d`
                 : ""}
+              {selectedSize ? ` in ${selectedSize.toUpperCase()}` : ""}
             </p>
             {searchQuery.trim() ? (
               <button
@@ -290,6 +274,43 @@ export function CollectionsContent() {
           </button>
         </div>
 
+        <div
+          className="mb-8 flex flex-wrap items-center gap-3 sm:mb-10"
+          aria-label="Filter products by notebook size"
+        >
+          <span className="mr-1 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">
+            Size
+          </span>
+          {SIZE_OPTIONS.map((size) => {
+            const selected = selectedSize === size.id;
+            return (
+              <button
+                key={size.id}
+                type="button"
+                onClick={() => selectSize(size.id)}
+                aria-pressed={selected}
+                className={cn(
+                  "min-w-14 rounded-full border px-5 py-2.5 font-label-md text-label-md transition-colors",
+                  selected
+                    ? "border-primary bg-primary text-on-primary"
+                    : "border-outline-variant bg-surface-container-lowest text-primary hover:border-primary",
+                )}
+              >
+                {size.id.toUpperCase()}
+              </button>
+            );
+          })}
+          {selectedSize ? (
+            <button
+              type="button"
+              onClick={() => setSelectedSize(null)}
+              className="ml-1 font-label-md text-label-md text-secondary underline-offset-4 hover:underline"
+            >
+              Clear size
+            </button>
+          ) : null}
+        </div>
+
         {paged.length === 0 ? (
           <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low px-8 py-16 text-center">
             <p className="font-headline-md text-headline-md text-primary">
@@ -313,7 +334,7 @@ export function CollectionsContent() {
               <div key={product.id} className="group flex flex-col">
                 <div className="relative mb-4 aspect-square overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm transition-all duration-500 md:mb-6 md:aspect-[3/4] md:rounded-xl md:bg-surface-container-low md:hover:-translate-y-2 md:hover:shadow-xl">
                   <Link
-                    href={`/products/${product.handle}`}
+                    href={productHref(product.handle, selectedSize)}
                     className="absolute inset-0"
                   >
                     <OptimizedImage
@@ -326,7 +347,7 @@ export function CollectionsContent() {
                   </Link>
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/60 to-transparent p-3 pt-12 opacity-0 transition-all duration-300 group-hover:opacity-100 md:p-4 md:pt-14">
                     <Link
-                      href={`/products/${product.handle}`}
+                      href={productHref(product.handle, selectedSize)}
                       className="pointer-events-none flex w-full items-center justify-center rounded-lg bg-primary px-3 py-2.5 text-center font-label-md text-xs tracking-wider text-on-primary uppercase transition-opacity hover:opacity-90 group-hover:pointer-events-auto sm:text-sm md:py-3 md:text-sm"
                     >
                       View Notebook
@@ -334,7 +355,7 @@ export function CollectionsContent() {
                   </div>
                 </div>
                 <Link
-                  href={`/products/${product.handle}`}
+                  href={productHref(product.handle, selectedSize)}
                   className="flex flex-col"
                 >
                   {product.badge ? (
@@ -358,9 +379,24 @@ export function CollectionsContent() {
                       </p>
                     ) : null;
                   })()}
-                  <p className="mt-1 font-body-md font-bold text-primary md:mt-2 md:font-headline-md md:text-headline-md md:font-normal">
-                    {product.price}
-                  </p>
+                  {(() => {
+                    const variant = displayedVariant(product, selectedSize);
+                    const price = variant?.price ?? product.price;
+                    const compareAtPrice =
+                      variant?.compareAtPrice ?? product.compareAtPrice;
+                    return (
+                      <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 md:mt-2">
+                        <p className="font-body-md font-bold text-primary md:font-headline-md md:text-headline-md md:font-normal">
+                          {price}
+                        </p>
+                        {compareAtPrice ? (
+                          <span className="font-body-sm text-on-surface-variant line-through">
+                            {compareAtPrice}
+                          </span>
+                        ) : null}
+                      </div>
+                    );
+                  })()}
                 </Link>
               </div>
             ))}
@@ -532,24 +568,26 @@ export function CollectionsContent() {
               <h3 className="mb-4 font-label-md text-label-md uppercase tracking-widest text-primary">
                 Size
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {SIZE_OPTIONS.map((size) => {
-                  const checked = sizes.includes(size.id);
+                  const selected = selectedSize === size.id;
                   return (
-                    <label
+                    <button
                       key={size.id}
-                      className="flex cursor-pointer items-center gap-3 rounded-lg border border-outline-variant/50 px-4 py-3 transition-colors hover:border-primary"
+                      type="button"
+                      onClick={() => selectSize(size.id)}
+                      className={cn(
+                        "flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left font-body-md transition-colors",
+                        selected
+                          ? "border-primary bg-surface-container-low text-primary"
+                          : "border-outline-variant/50 text-on-surface-variant hover:border-primary hover:text-primary",
+                      )}
                     >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggleSize(size.id)}
-                        className="h-4 w-4 rounded-sm border-outline-variant text-primary focus:ring-0"
-                      />
-                      <span className="font-body-md text-on-surface">
-                        {size.label}
-                      </span>
-                    </label>
+                      <span>{size.label}</span>
+                      {selected ? (
+                        <MaterialIcon name="check" className="text-[20px]" />
+                      ) : null}
+                    </button>
                   );
                 })}
               </div>

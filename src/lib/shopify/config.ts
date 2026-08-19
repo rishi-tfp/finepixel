@@ -22,10 +22,15 @@ function normalizeStoreDomain(storeDomain: string) {
   return storeDomain.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
 
+function readEnv(name: string) {
+  // Dynamic lookup so Next.js cannot inline these at build time.
+  // Vercel "Sensitive" vars are runtime-only and would otherwise be empty.
+  return process.env[name]?.trim() || "";
+}
+
 function hasAdminClientCredentials() {
   return Boolean(
-    process.env.SHOPIFY_ADMIN_CLIENT_ID &&
-      process.env.SHOPIFY_ADMIN_CLIENT_SECRET,
+    readEnv("SHOPIFY_ADMIN_CLIENT_ID") && readEnv("SHOPIFY_ADMIN_CLIENT_SECRET"),
   );
 }
 
@@ -39,17 +44,17 @@ function hasAdminClientCredentials() {
  */
 export function isShopifyAdminConfigured() {
   return Boolean(
-    process.env.SHOPIFY_STORE_DOMAIN &&
-      (process.env.SHOPIFY_ADMIN_ACCESS_TOKEN || hasAdminClientCredentials()),
+    readEnv("SHOPIFY_STORE_DOMAIN") &&
+      (readEnv("SHOPIFY_ADMIN_ACCESS_TOKEN") || hasAdminClientCredentials()),
   );
 }
 
 export function getShopifyAdminConfig() {
-  const storeDomain = process.env.SHOPIFY_STORE_DOMAIN;
-  const apiVersion = process.env.SHOPIFY_API_VERSION || "2026-01";
-  const adminAccessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
-  const clientId = process.env.SHOPIFY_ADMIN_CLIENT_ID;
-  const clientSecret = process.env.SHOPIFY_ADMIN_CLIENT_SECRET;
+  const storeDomain = readEnv("SHOPIFY_STORE_DOMAIN");
+  const apiVersion = readEnv("SHOPIFY_API_VERSION") || "2026-01";
+  const adminAccessToken = readEnv("SHOPIFY_ADMIN_ACCESS_TOKEN") || undefined;
+  const clientId = readEnv("SHOPIFY_ADMIN_CLIENT_ID") || undefined;
+  const clientSecret = readEnv("SHOPIFY_ADMIN_CLIENT_SECRET") || undefined;
 
   if (!storeDomain) {
     throw new Error("Missing SHOPIFY_STORE_DOMAIN (server-only env var)");

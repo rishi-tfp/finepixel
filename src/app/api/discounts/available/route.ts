@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { NextResponse } from "next/server";
 import {
   applyCouponCopy,
@@ -10,6 +11,7 @@ import { isShopifyAdminConfigured, isShopifyEnabled } from "@/lib/shopify/config
 import { fetchActiveDiscountCodes } from "@/lib/shopify/discounts";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 type EvaluatedCoupon = {
   code: string;
@@ -19,20 +21,31 @@ type EvaluatedCoupon = {
   savings: number;
 };
 
+type CatalogResult = {
+  coupons: Coupon[];
+  source: "shopify" | "fallback";
+};
+
 /**
  * Shopify Admin is the source of truth for which codes exist. The hardcoded
- * list is only a stand-in for deployments without an Admin token.
+ * list is only a stand-in for deployments without Admin credentials.
  */
-async function loadCatalog(): Promise<Coupon[]> {
-  if (!isShopifyAdminConfigured()) return FALLBACK_COUPONS;
+async function loadCatalog(): Promise<CatalogResult> {
+  if (!isShopifyAdminConfigured()) {
+    return { coupons: FALLBACK_COUPONS, source: "fallback" };
+  }
+
   try {
     const active = await fetchActiveDiscountCodes();
-    return active.map((discount) =>
-      applyCouponCopy(discount.code, discount.summary),
-    );
+    return {
+      coupons: active.map((discount) =>
+        applyCouponCopy(discount.code, discount.summary),
+      ),
+      source: "shopify",
+    };
   } catch (error) {
     console.error("[api/discounts/available] admin list failed", error);
-    return FALLBACK_COUPONS;
+    return { coupons: FALLBACK_COUPONS, source: "fallback" };
   }
 }
 
@@ -44,14 +57,22 @@ async function loadCatalog(): Promise<Coupon[]> {
  * back before returning, which is why this must run sequentially.
  */
 export async function GET() {
+  await connection();
+
   if (!isShopifyEnabled()) {
     return NextResponse.json({ coupons: [], bestCode: null });
   }
 
   try {
-    const catalog = await loadCatalog();
+    const { coupons: catalog, source } = await loadCatalog();
+    const adminConfigured = isShopifyAdminConfigured();
     if (catalog.length === 0) {
-      return NextResponse.json({ coupons: [], bestCode: null });
+      return NextResponse.json({
+        coupons: [],
+        bestCode: null,
+        source,
+        adminConfigured,
+      });
     }
 
     const cartId = await getCartId();
@@ -64,6 +85,8 @@ export async function GET() {
         })),
         bestCode: null,
         currencyCode: "INR",
+        source,
+        adminConfigured,
         empty: true,
       });
     }
@@ -78,6 +101,8 @@ export async function GET() {
         })),
         bestCode: null,
         currencyCode: original?.currencyCode ?? "INR",
+        source,
+        adminConfigured,
         empty: true,
       });
     }
@@ -121,6 +146,8 @@ export async function GET() {
       bestSavings: best?.savings ?? 0,
       currencyCode: original.currencyCode,
       appliedCode: originalCodes[0] ?? null,
+      source,
+      adminConfigured,
     });
   } catch (error) {
     console.error("[api/discounts/available]", error);

@@ -26,12 +26,23 @@ async function fetchClientCredentialsToken(
     },
   );
 
-  const json = (await response.json().catch(() => null)) as {
+  const tokenText = await response.text();
+  let json: {
     access_token?: string;
     expires_in?: number;
     error?: string;
     error_description?: string;
-  } | null;
+  } | null = null;
+  try {
+    json = JSON.parse(tokenText) as {
+      access_token?: string;
+      expires_in?: number;
+      error?: string;
+      error_description?: string;
+    };
+  } catch {
+    json = null;
+  }
 
   if (!response.ok || !json?.access_token) {
     throw new Error(

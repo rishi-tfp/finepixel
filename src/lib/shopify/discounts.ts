@@ -20,6 +20,18 @@ const DISCOUNT_FIELDS = `
   }
 `;
 
+// DiscountCodeApp has no `summary` field — including it breaks the whole
+// query for every discount type, since GraphQL errors are request-wide.
+const DISCOUNT_APP_FIELDS = `
+  title
+  status
+  codes(first: 250) {
+    nodes {
+      code
+    }
+  }
+`;
+
 const ACTIVE_DISCOUNT_CODES_QUERY = `
   query ActiveDiscountCodes($first: Int!, $after: String, $query: String) {
     discountNodes(first: $first, after: $after, query: $query) {
@@ -30,7 +42,7 @@ const ACTIVE_DISCOUNT_CODES_QUERY = `
             ... on DiscountCodeBasic { ${DISCOUNT_FIELDS} }
             ... on DiscountCodeBxgy { ${DISCOUNT_FIELDS} }
             ... on DiscountCodeFreeShipping { ${DISCOUNT_FIELDS} }
-            ... on DiscountCodeApp { ${DISCOUNT_FIELDS} }
+            ... on DiscountCodeApp { ${DISCOUNT_APP_FIELDS} }
           }
         }
       }

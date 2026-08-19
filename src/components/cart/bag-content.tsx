@@ -25,6 +25,8 @@ export function BagContent() {
     items,
     count,
     subtotal,
+    total,
+    autoDiscountTotal,
     currencyCode,
     hydrated,
     updateQuantity,
@@ -167,9 +169,7 @@ export function BagContent() {
   }
 
   const displayCurrency = appliedDiscount?.currencyCode ?? currencyCode;
-  const displayTotal = appliedDiscount
-    ? appliedDiscount.totalAmount
-    : subtotal;
+  const displayTotal = appliedDiscount ? appliedDiscount.totalAmount : total;
   const unavailableItems = items.filter((item) => item.available === false);
 
   return (
@@ -294,6 +294,15 @@ export function BagContent() {
                     appliedDiscount.discountTotal,
                     displayCurrency,
                   )}
+                </span>
+              </div>
+            ) : !appliedDiscount && autoDiscountTotal > 0 ? (
+              <div className="flex items-start justify-between gap-3 text-body-md">
+                <span className="min-w-0 break-words text-secondary">
+                  Discount applied
+                </span>
+                <span className="shrink-0 text-right font-medium text-secondary tabular-nums">
+                  −{formatCartMoney(autoDiscountTotal, currencyCode)}
                 </span>
               </div>
             ) : null}

@@ -43,6 +43,8 @@ type CartApiPayload = {
   totalQuantity?: number;
   subtotalAmount?: number;
   totalAmount?: number;
+  discountTotal?: number;
+  appliedDiscountCodes?: string[];
   currencyCode?: string;
   lines?: Array<{
     lineId: string;
@@ -66,6 +68,8 @@ type CartContextValue = {
   items: CartItem[];
   count: number;
   subtotal: number;
+  total: number;
+  autoDiscountTotal: number;
   currencyCode: string;
   checkoutUrl: string | null;
   hydrated: boolean;
@@ -118,6 +122,8 @@ function mapApiLines(payload: CartApiPayload): CartItem[] {
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [subtotal, setSubtotal] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [autoDiscountTotal, setAutoDiscountTotal] = useState(0);
   const [currencyCode, setCurrencyCode] = useState("INR");
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false);
@@ -127,6 +133,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const applyPayload = useCallback((payload: CartApiPayload) => {
     setItems(mapApiLines(payload));
     setSubtotal(payload.subtotalAmount ?? 0);
+    setTotal(payload.totalAmount ?? payload.subtotalAmount ?? 0);
+    // No applied code means any discount already on the cart total is Shopify's
+    // automatic discount, applied without the shopper entering anything.
+    const hasManualCode = (payload.appliedDiscountCodes?.length ?? 0) > 0;
+    setAutoDiscountTotal(
+      !hasManualCode ? (payload.discountTotal ?? 0) : 0,
+    );
     setCurrencyCode(payload.currencyCode ?? "INR");
     setCheckoutUrl(payload.checkoutUrl ?? null);
   }, []);
@@ -153,6 +166,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       .catch(() => {
         setItems([]);
         setSubtotal(0);
+        setTotal(0);
+        setAutoDiscountTotal(0);
         setCheckoutUrl(null);
       })
       .finally(() => setHydrated(true));
@@ -247,6 +262,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const clear = useCallback(() => {
     setItems([]);
     setSubtotal(0);
+    setTotal(0);
+    setAutoDiscountTotal(0);
     setCheckoutUrl(null);
   }, []);
 
@@ -282,6 +299,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       items,
       count: items.reduce((sum, item) => sum + item.quantity, 0),
       subtotal,
+      total,
+      autoDiscountTotal,
       currencyCode,
       checkoutUrl,
       hydrated,
@@ -296,6 +315,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [
       items,
       subtotal,
+      total,
+      autoDiscountTotal,
       currencyCode,
       checkoutUrl,
       hydrated,

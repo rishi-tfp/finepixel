@@ -272,7 +272,7 @@ export function BagContent() {
       </div>
 
       <div className="min-w-0 lg:sticky lg:top-32 lg:col-span-5">
-        <div className="luxury-shadow min-w-0 overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-5 sm:p-8">
+        <div className="luxury-shadow min-w-0 rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-5 sm:p-8">
           <h2 className="mb-6 font-headline-md text-headline-md sm:mb-8">
             Summary
           </h2>

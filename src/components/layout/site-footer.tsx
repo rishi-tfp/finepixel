@@ -42,7 +42,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-auto w-full max-w-full min-w-0 overflow-x-clip border-t border-outline-variant bg-surface-container-lowest px-margin-mobile pt-16 pb-28 md:px-margin-desktop md:pt-section-gap md:pb-12">
       <div className="mx-auto grid max-w-container-max min-w-0 grid-cols-1 gap-12 md:grid-cols-12 md:gap-gutter">
-        <div className="md:col-span-4">
+        <div className="flex flex-col items-center text-center md:col-span-4 md:items-start md:text-left">
           <Link
             href="/"
             aria-label="The Fine Pixel home"
@@ -53,7 +53,7 @@ export function SiteFooter() {
           <p className="mb-8 max-w-xs font-body-md text-on-surface-variant">
             Crafting premium stationery for the discerning creative since 2024.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap justify-center gap-3 md:justify-start">
             {SOCIAL.map((item) => (
               <a
                 key={item.icon}
@@ -74,7 +74,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-8 gap-y-12 md:col-span-8 md:grid-cols-3 md:gap-gutter">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 text-center md:col-span-8 md:grid-cols-3 md:gap-gutter md:text-left">
           {LINK_COLS.map((col) => (
             <div key={col.title} className="min-w-0">
               <h4 className="mb-5 font-label-md text-label-md uppercase tracking-wider text-primary">
